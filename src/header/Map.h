@@ -13,6 +13,7 @@ private:
 	const int cellSize = 16;
 
 	sf::Vector2f getDeltaFactor(float angle);
+	sf::Vector2f getPlayerNewPos(sf::Vector2f playerPos, sf::Vector2f playerMove);
 
 public:
 	Map();

@@ -56,9 +56,32 @@ void Map::movePlayer(std::shared_ptr<Player> player, std::string direction)
 {
 	sf::Vector2f move = player->move(direction);
 
-	player->setPosition(
-		player->getPosition().x + move.x,
-		player->getPosition().y + move.y);
+	float playerHitboxExcess = player->getHitbox().getRadius() / 2;
+
+	sf::Vector2f newPlayerPos(this->getPlayerNewPos(player->getPosition(), move));
+
+	player->setPosition(newPlayerPos.x, newPlayerPos.y);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+sf::Vector2f Map::getPlayerNewPos(sf::Vector2f playerPos, sf::Vector2f playerMove)
+{
+	sf::Vector2f newPlayerPos(playerPos);
+
+	float newX = playerPos.x + playerMove.x;
+	float newY = playerPos.y + playerMove.y;
+
+	int cellX = floor(newX / 16);
+	int cellY = floor(newY / 16);
+
+	if(this->cells[cellY][cellX].getNum() != 1)
+	{
+		newPlayerPos.x = newX;
+		newPlayerPos.y = newY;
+	}
+
+	return newPlayerPos;
 }
 
 /*-------------------------------------------------------------------------------*/
