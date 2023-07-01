@@ -55,26 +55,34 @@ void Map::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 void Map::movePlayer(std::shared_ptr<Player> player, std::string direction)
 {
 	sf::Vector2f move = player->move(direction);
+	sf::Vector2f playerPosition(player->getPosition().x - player->getRadius(), player->getPosition().y - player->getRadius());
 
-	if(canPlayerMove(player->getPosition(), move))
+	if(canPlayerMove(playerPosition, move))
 	{
 		player->setPosition(
 			player->getPosition().x + move.x,
 			player->getPosition().y + move.y
 		);
 	}
-	else if(canPlayerMove(player->getPosition(), sf::Vector2f(move.x, 0)))
+	else if(canPlayerMove(playerPosition, sf::Vector2f(move.x, 0)))
 	{
 		player->setPosition(
 			player->getPosition().x + move.x,
 			player->getPosition().y
 		);
 	}
-	else if(canPlayerMove(player->getPosition(), sf::Vector2f(0, move.y)))
+	else if(canPlayerMove(playerPosition, sf::Vector2f(0, move.y)))
 	{
 		player->setPosition(
 			player->getPosition().x,
 			player->getPosition().y + move.y
+		);
+	}
+	else 
+	{
+		player->setPosition(
+			round(playerPosition.x) * this->cellSize,
+			round(playerPosition.y) * this->cellSize
 		);
 	}
 }
@@ -84,17 +92,25 @@ void Map::movePlayer(std::shared_ptr<Player> player, std::string direction)
 bool Map::canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove)
 {
 	sf::Vector2f posAfterMove(playerPos.x + playerMove.x, playerPos.y + playerMove.y);
-	bool canMove = false;
 
-	int cellX = floor(posAfterMove.x / 16);
-	int cellY = floor(posAfterMove.y / 16);
+	float cellX = posAfterMove.x / 16;
+	float cellY = posAfterMove.y / 16;
 
-	if(this->cells[cellY][cellX].getNum() != 1)
-	{
-		canMove = true;
-	}
+	int x = floor(cellX);
+	int y = floor(cellY);
+	if(this->cells[y][x].getNum() != 0) return false;
 
-	return canMove;
+	x = ceil(cellX);
+	if(this->cells[y][x].getNum() != 0) return false;
+
+	x = floor(cellX);
+	y = ceil(cellY);
+	if(this->cells[y][x].getNum() != 0) return false;
+
+	x = ceil(cellX);
+	if(this->cells[y][x].getNum() != 0) return false;
+
+	return true;
 }
 
 /*-------------------------------------------------------------------------------*/

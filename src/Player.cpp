@@ -3,7 +3,7 @@
 
 Player::Player(float windowWidth)
 {
-	this->radius = 16;
+	this->radius = 8;
 
 	this->hitbox.setRadius(this->radius);
 
