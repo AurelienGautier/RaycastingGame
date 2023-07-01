@@ -44,12 +44,12 @@ void GameState::updateMouseInputs()
 
 	this->player->rotate(rotationAngle);
 
-	/*if(mousePos.x != this->window->getSize().x / 2 || mousePos.y != this->window->getSize().y / 2)
+	if(mousePos.x != this->window->getSize().x / 2 || mousePos.y != this->window->getSize().y / 2)
 	{
 		sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 		mousePos.x = this->window->getSize().x / 2;
 		mousePos.y = this->window->getSize().y / 2;
-	}*/
+	}
 
 	this->mousePosition = mousePos;
 }
