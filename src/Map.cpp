@@ -52,11 +52,13 @@ void Map::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 
 /*-------------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------------*/
-
-void Map::updateCollision(std::shared_ptr<Player> player)
+void Map::movePlayer(std::shared_ptr<Player> player, std::string direction)
 {
+	sf::Vector2f move = player->move(direction);
 
+	player->setPosition(
+		player->getPosition().x + move.x,
+		player->getPosition().y + move.y);
 }
 
 /*-------------------------------------------------------------------------------*/

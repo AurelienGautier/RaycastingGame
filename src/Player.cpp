@@ -51,36 +51,32 @@ void Player::update()
 
 /*-------------------------------------------------------------------------------*/
 
-void Player::move(std::string direction)
+sf::Vector2f Player::move(std::string direction)
 {
-
-	float xMove = 0;
-	float yMove = 0;
+	sf::Vector2f move(0, 0);
 
 	if (direction == "FORWARD")
 	{
-		xMove = cos((this->hitbox.getRotation()) * 3.14f / 180.0f) / 1.5;
-		yMove = sin((this->hitbox.getRotation()) * 3.14f / 180.0f) / 1.5;
+		move.x = cos((this->hitbox.getRotation()) * 3.14f / 180.0f);
+		move.y = sin((this->hitbox.getRotation()) * 3.14f / 180.0f);
 	}
 	else if (direction == "RIGHT")
 	{
-		xMove = cos((this->hitbox.getRotation() + 90) * 3.14f / 180.0f);
-		yMove = sin((this->hitbox.getRotation() + 90) * 3.14f / 180.0f);
+		move.x = cos((this->hitbox.getRotation() + 90) * 3.14f / 180.0f);
+		move.y = sin((this->hitbox.getRotation() + 90) * 3.14f / 180.0f);
 	}
 	else if (direction == "LEFT")
 	{
-		xMove = cos((this->hitbox.getRotation() - 90) * 3.14f / 180.0f);
-		yMove = sin((this->hitbox.getRotation() - 90) * 3.14f / 180.0f);
+		move.x = cos((this->hitbox.getRotation() - 90) * 3.14f / 180.0f);
+		move.y = sin((this->hitbox.getRotation() - 90) * 3.14f / 180.0f);
 	}
 	else if (direction == "BACK")
 	{
-		xMove = -cos((this->hitbox.getRotation()) * 3.14f / 180.0f);
-		yMove = -sin((this->hitbox.getRotation()) * 3.14f / 180.0f);
+		move.x = -cos((this->hitbox.getRotation()) * 3.14f / 180.0f);
+		move.y = -sin((this->hitbox.getRotation()) * 3.14f / 180.0f);
 	}
 
-	this->hitbox.setPosition(
-		this->hitbox.getPosition().x + xMove,
-		this->hitbox.getPosition().y + yMove);
+	return move;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -130,14 +126,9 @@ sf::Vector2f Player::getPosition()
 
 /*-------------------------------------------------------------------------------*/
 
-sf::FloatRect Player::getNextPos(int x, int y)
+void Player::setPosition(float x, float y)
 {
-	sf::FloatRect nextPosition(
-		this->hitbox.getPosition().x + x * this->speed,
-		this->hitbox.getPosition().y + y * this->speed,
-		this->radius, this->radius);
-
-	return nextPosition;
+	this->hitbox.setPosition(x, y);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -191,3 +182,5 @@ float Player::getVerticalFov()
 {
 	return this->verticalFov;
 }
+
+/*-------------------------------------------------------------------------------*/

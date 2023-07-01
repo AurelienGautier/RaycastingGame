@@ -20,7 +20,6 @@ void GameState::update()
 {
 	this->updateInputs();
 	this->updateMouseInputs();
-	this->map.updateCollision(this->player);
 	this->player->update();
 	this->map.updateFovContact(this->player);
 }
@@ -29,13 +28,13 @@ void GameState::updateInputs()
 {
 	// movement
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-		this->player->move("FORWARD");
+		this->map.movePlayer(this->player, "FORWARD");
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		this->player->move("RIGHT");
+		this->map.movePlayer(this->player, "RIGHT");
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		this->player->move("LEFT");
+		this->map.movePlayer(this->player, "LEFT");
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		this->player->move("BACK");
+		this->map.movePlayer(this->player, "BACK");
 }
 
 void GameState::updateMouseInputs()

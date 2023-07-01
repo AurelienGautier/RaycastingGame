@@ -23,7 +23,7 @@ public:
 	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
 	void update();
 
-	void move(std::string direction);
+	sf::Vector2f move(std::string direction);
 	void rotate(float sens);
 
 	float getSpeed();
@@ -34,7 +34,7 @@ public:
 	sf::CircleShape getHitbox();
 
 	sf::Vector2f getPosition();
-	sf::FloatRect getNextPos(int x, int y);
+	void setPosition(float x, float y);
 
 	void initRays(float windowWidth);
 
@@ -45,5 +45,6 @@ public:
 
 	float getFov();
 	float getVerticalFov();
+
 };
 
