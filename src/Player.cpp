@@ -30,17 +30,21 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 
 	window->draw(this->hitbox);
 
+	sf::VertexArray fovVisualization(sf::TriangleFan, 1 + this->rays.size());
+	fovVisualization[0].position = this->hitbox.getPosition();
+
 	for (int i = 0; i < this->rays.size(); i++)
 	{
 		float angle = (this->hitbox.getRotation() - this->fov / 2) + (i * this->fov / this->rays.size());
+		if (angle < 0) angle += 360;
+		if (angle > 360) angle -= 360;
 
-		sf::RectangleShape ray;
-		ray.setSize(sf::Vector2f(this->rays[i], 1));
-		ray.setRotation(angle);
-		ray.setPosition(this->hitbox.getPosition());
-		
-		window->draw(ray);
+		fovVisualization[1 + i].position = sf::Vector2f(
+			this->hitbox.getPosition().x + rays[i] * cos(angle * 3.14f / 180.0f),
+			this->hitbox.getPosition().y + rays[i] * sin(angle * 3.14f / 180.0f));
 	}
+
+	window->draw(fovVisualization);
 
 	view.setCenter(this->hitbox.getPosition());
 }
