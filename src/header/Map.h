@@ -13,12 +13,13 @@ private:
 	const int cellSize = 16;
 
 	sf::Vector2f getDeltaFactor(float angle);
+	bool canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove);
 
 public:
 	Map();
 
 	void update();
-	void updateCollision(std::shared_ptr<Player> player);
+	void movePlayer(std::shared_ptr<Player> player, std::string direction);
 	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
 
 	void convertMap(std::vector<std::vector<int>> intMap);
