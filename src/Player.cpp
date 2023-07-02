@@ -32,7 +32,14 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 
 	for (int i = 0; i < this->rays.size(); i++)
 	{
-		window->draw(this->rays[i]);
+		float angle = (this->hitbox.getRotation() - this->fov / 2) + (i * this->fov / this->rays.size());
+
+		sf::RectangleShape ray;
+		ray.setSize(sf::Vector2f(this->rays[i], 1));
+		ray.setRotation(angle);
+		ray.setPosition(this->hitbox.getPosition());
+		
+		window->draw(ray);
 	}
 
 	view.setCenter(this->hitbox.getPosition());
@@ -44,8 +51,7 @@ void Player::update()
 {
 	for (int i = 0; i < this->rays.size(); i++)
 	{
-		this->rays[i].setPosition(sf::Vector2f(this->hitbox.getPosition().x, this->hitbox.getPosition().y));
-		this->rays[i].setSize(sf::Vector2f(this->maxRayLength, 1));
+		this->rays[i] = this->maxRayLength;
 	}
 }
 
@@ -84,11 +90,6 @@ sf::Vector2f Player::move(std::string direction)
 void Player::rotate(float sens)
 {
 	this->hitbox.rotate(sens);
-
-	for (int i = 0; i < this->rays.size(); i++)
-	{
-		this->rays[i].rotate(sens);
-	}
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -137,33 +138,20 @@ void Player::initRays(float windowWidth)
 {
 	for (float i = 0; i <= windowWidth; i++)
 	{
-		sf::RectangleShape newRay;
-
-		float angle = (this->hitbox.getRotation() - this->fov / 2) + (i * this->fov / windowWidth);
-
-		newRay.setSize(sf::Vector2f(this->maxRayLength, 1));
-		newRay.setRotation(angle);
-		newRay.setPosition(sf::Vector2f(this->hitbox.getPosition().x, this->hitbox.getPosition().y));
-
-		this->rays.push_back(newRay);
+		this->rays.push_back(this->maxRayLength);
 	}
 }
 
 /*-------------------------------------------------------------------------------*/
 
-std::vector<sf::RectangleShape> Player::getRays()
+std::vector<float> Player::getRays()
 {
 	return this->rays;
 }
 
-void Player::setRay(int index, sf::RectangleShape ray)
-{
-	this->rays[index] = ray;
-}
-
 void Player::setRaySize(int index, float raySize)
 {
-	this->rays[index].setSize(sf::Vector2f(raySize, 1));
+	this->rays[index] = raySize;
 }
 
 /*-------------------------------------------------------------------------------*/

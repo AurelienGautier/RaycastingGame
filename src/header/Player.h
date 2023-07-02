@@ -12,7 +12,7 @@ private:
 	sf::CircleShape hitbox;
 	float speed;
 	float radius;
-	std::vector<sf::RectangleShape> rays;
+	std::vector<float> rays;
 	float fov;
 	float verticalFov;
 	float const maxRayLength = 192;
@@ -38,7 +38,7 @@ public:
 
 	void initRays(float windowWidth);
 
-	std::vector<sf::RectangleShape> getRays();
+	std::vector<float> getRays();
 	void setRay(int index, sf::RectangleShape ray);
 	void setRaySize(int index, float raySize);
 	float getMaxRayLength();

@@ -136,16 +136,20 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 void Map::updateFovContact(std::shared_ptr<Player> player)
 {
-	std::vector<sf::RectangleShape> rays = player->getRays();
+	std::vector<float> rays = player->getRays();
 
 	for (int i = 0; i < rays.size(); i++)
 	{
 		float rayLength = 0;
 		sf::Vector2f startPoint = player->getPosition();
 		bool wallMet = false;
-		int raySize = rays[i].getSize().x;
+		int raySize = rays[i];
 
-		float angle = rays[i].getRotation();
+		float angle = (player->getHitbox().getRotation() - player->getFov() / 2) + (i * player->getFov() / rays.size());
+
+		if(angle < 0) angle += 360;
+		else if(angle > 360) angle -= 360;
+
 		float slope = tan(angle * 3.14f / 180.0f);
 
 		while (rayLength < raySize && !wallMet) 
