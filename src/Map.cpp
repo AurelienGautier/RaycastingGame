@@ -148,7 +148,7 @@ void Map::updateFovContact(std::shared_ptr<Player> player)
 		float angle = (player->getHitbox().getRotation() - player->getFov() / 2) + (i * player->getFov() / rays.size());
 
 		if(angle < 0) angle += 360;
-		else if(angle > 360) angle -= 360;
+		else if(angle >= 360) angle -= 360;
 
 		float slope = tan(angle * 3.14f / 180.0f);
 
