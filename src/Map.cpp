@@ -81,8 +81,8 @@ void Map::movePlayer(std::shared_ptr<Player> player, std::string direction)
 	else 
 	{
 		player->setPosition(
-			round(player->getPosition().x / this->cellSize) * this->cellSize,
-			round(player->getPosition().y / this->cellSize) * this->cellSize
+			round(player->getPosition().x) ,
+			round(player->getPosition().y)  
 		);
 	}
 }
