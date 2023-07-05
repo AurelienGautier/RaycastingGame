@@ -14,6 +14,8 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow) : State(gameW
 	this->minimapView.setSize(sf::Vector2f(this->window->getSize().x / 4, this->window->getSize().y / 4));
 	this->minimapView.setViewport(sf::FloatRect(0, 0, 0.25, 0.25));
 	this->minimapView.zoom(2);
+
+	sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 }
 
 void GameState::update() 
@@ -40,18 +42,19 @@ void GameState::updateInputs()
 void GameState::updateMouseInputs()
 {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);
-	float rotationAngle = (float(mousePos.x) - float(this->mousePosition.x)) / 16;
 
-	this->player->rotate(rotationAngle);
+	sf::Vector2f windowCenter(
+		this->window->getSize().x / 2,
+		this->window->getSize().y / 2
+	);
 
-	if(mousePos.x != this->window->getSize().x / 2 || mousePos.y != this->window->getSize().y / 2)
-	{
-		sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
-		mousePos.x = this->window->getSize().x / 2;
-		mousePos.y = this->window->getSize().y / 2;
-	}
+	float horizontalRotation = this->player->getFov() * (mousePos.x - windowCenter.x) / this->window->getSize().x;
+	float verticalRotation = this->player->getVerticalFov() * (windowCenter.y - mousePos.y) / this->window->getSize().y;
 
-	this->mousePosition = mousePos;
+	this->player->rotate(horizontalRotation);
+	this->player->setVerticalRotation(this->player->getVerticalRotation() + verticalRotation);
+
+	sf::Mouse::setPosition(sf::Vector2i(windowCenter.x, windowCenter.y), *this->window);
 }
 
 void GameState::render()
