@@ -4,6 +4,7 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow) : State(gameW
 {
 	this->player = std::make_shared<Player>(gameWindow->getSize().x);
 	this->window->setMouseCursorVisible(false);
+	sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 	this->mousePosition = sf::Mouse::getPosition(*this->window);
 
 	this->gameplayView.setCenter(sf::Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));
@@ -14,8 +15,6 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow) : State(gameW
 	this->minimapView.setSize(sf::Vector2f(this->window->getSize().x / 4, this->window->getSize().y / 4));
 	this->minimapView.setViewport(sf::FloatRect(0, 0, 0.25, 0.25));
 	this->minimapView.zoom(2);
-
-	sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 }
 
 void GameState::update() 
@@ -44,9 +43,7 @@ void GameState::updateMouseInputs()
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);
 
 	sf::Vector2f windowCenter(
-		this->window->getSize().x / 2,
-		this->window->getSize().y / 2
-	);
+		this->window->getSize().x / 2, this->window->getSize().y / 2);
 
 	float horizontalRotation = this->player->getFov() * (mousePos.x - windowCenter.x) / this->window->getSize().x;
 	float verticalRotation = this->player->getVerticalFov() * (windowCenter.y - mousePos.y) / this->window->getSize().y;
@@ -77,6 +74,8 @@ void GameState::render3d()
 	float screenWidth = this->window->getSize().x;
 	float screenHeight = this->window->getSize().y;
 
+	float floorLevel = round(screenHeight / 2 * (1 + tan(this->player->getVerticalRotation() * 3.14f / 180.0f) / tan(this->player->getVerticalFov() / 2  * 3.14f / 180.0f)));
+
 	for (int i = 0; i < screenWidth; i++)
 	{
 		if (rays[i] < this->player->getMaxRayLength())
@@ -86,7 +85,7 @@ void GameState::render3d()
 
 			sf::RectangleShape shape(sf::Vector2f(1, shapeHeight));
 			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
-			shape.setPosition(i, (screenHeight - shapeHeight) / 2);
+			shape.setPosition(i, (floorLevel - shapeHeight) / 2);
 
 			this->window->draw(shape);
 		}
