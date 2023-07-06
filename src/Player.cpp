@@ -47,6 +47,7 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 	}
 
 	window->draw(fovVisualization);
+	view.setCenter(this->hitbox.getPosition());
 }
 /*-------------------------------------------------------------------------------*/
 

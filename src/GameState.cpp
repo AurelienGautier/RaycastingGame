@@ -42,8 +42,7 @@ void GameState::updateMouseInputs()
 {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);
 
-	sf::Vector2f windowCenter(
-		this->window->getSize().x / 2, this->window->getSize().y / 2);
+	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
 
 	float horizontalRotation = this->player->getFov() * (mousePos.x - windowCenter.x) / this->window->getSize().x;
 	float verticalRotation = this->player->getVerticalFov() * (windowCenter.y - mousePos.y) / this->window->getSize().y;
@@ -85,7 +84,7 @@ void GameState::render3d()
 
 			sf::RectangleShape shape(sf::Vector2f(1, shapeHeight));
 			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
-			shape.setPosition(i, (floorLevel - shapeHeight) / 2);
+			shape.setPosition(i, floorLevel - shapeHeight / 2);
 
 			this->window->draw(shape);
 		}
