@@ -4,6 +4,7 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow) : State(gameW
 {
 	this->player = std::make_shared<Player>(gameWindow->getSize().x);
 	this->window->setMouseCursorVisible(false);
+	sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 	this->mousePosition = sf::Mouse::getPosition(*this->window);
 
 	this->gameplayView.setCenter(sf::Vector2f(this->window->getSize().x / 2, this->window->getSize().y / 2));
@@ -40,18 +41,16 @@ void GameState::updateInputs()
 void GameState::updateMouseInputs()
 {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);
-	float rotationAngle = (float(mousePos.x) - float(this->mousePosition.x)) / 16;
 
-	this->player->rotate(rotationAngle);
+	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
 
-	if(mousePos.x != this->window->getSize().x / 2 || mousePos.y != this->window->getSize().y / 2)
-	{
-		sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
-		mousePos.x = this->window->getSize().x / 2;
-		mousePos.y = this->window->getSize().y / 2;
-	}
+	float horizontalRotation = this->player->getFov() * (mousePos.x - windowCenter.x) / this->window->getSize().x;
+	float verticalRotation = this->player->getVerticalFov() * (windowCenter.y - mousePos.y) / this->window->getSize().y;
 
-	this->mousePosition = mousePos;
+	this->player->rotate(horizontalRotation);
+	this->player->setVerticalRotation(this->player->getVerticalRotation() + verticalRotation);
+
+	sf::Mouse::setPosition(sf::Vector2i(windowCenter.x, windowCenter.y), *this->window);
 }
 
 void GameState::render()
@@ -74,6 +73,8 @@ void GameState::render3d()
 	float screenWidth = this->window->getSize().x;
 	float screenHeight = this->window->getSize().y;
 
+	float floorLevel = round(screenHeight / 2 * (1 + tan(this->player->getVerticalRotation() * 3.14f / 180.0f) / tan(this->player->getVerticalFov() / 2  * 3.14f / 180.0f)));
+
 	for (int i = 0; i < screenWidth; i++)
 	{
 		if (rays[i] < this->player->getMaxRayLength())
@@ -83,7 +84,7 @@ void GameState::render3d()
 
 			sf::RectangleShape shape(sf::Vector2f(1, shapeHeight));
 			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
-			shape.setPosition(i, (screenHeight - shapeHeight) / 2);
+			shape.setPosition(i, floorLevel - shapeHeight / 2);
 
 			this->window->draw(shape);
 		}

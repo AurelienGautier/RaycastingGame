@@ -20,6 +20,8 @@ Player::Player(float windowWidth)
 	this->verticalFov = 58.75f;
 
 	this->initRays(windowWidth);
+
+	this->verticalRotation = 0;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -45,10 +47,8 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 	}
 
 	window->draw(fovVisualization);
-
 	view.setCenter(this->hitbox.getPosition());
 }
-
 /*-------------------------------------------------------------------------------*/
 
 void Player::update()
@@ -94,6 +94,13 @@ sf::Vector2f Player::move(std::string direction)
 void Player::rotate(float sens)
 {
 	this->hitbox.rotate(sens);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+float Player::getRotation()
+{
+	return this->hitbox.getRotation();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -173,6 +180,23 @@ float Player::getFov()
 float Player::getVerticalFov()
 {
 	return this->verticalFov;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Player::setVerticalRotation(float angle)
+{
+	if(angle < -89) angle = -89;
+	else if (angle > 89) angle = 89;
+
+	this->verticalRotation = angle;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+float Player::getVerticalRotation()
+{
+	return this->verticalRotation;
 }
 
 /*-------------------------------------------------------------------------------*/

@@ -16,6 +16,7 @@ private:
 	float fov;
 	float verticalFov;
 	float const maxRayLength = 192;
+	float verticalRotation;
 
 public:
 	Player(float windowWidth);
@@ -24,7 +25,9 @@ public:
 	void update();
 
 	sf::Vector2f move(std::string direction);
+
 	void rotate(float sens);
+	float getRotation();
 
 	float getSpeed();
 
@@ -40,11 +43,14 @@ public:
 
 	std::vector<float> getRays();
 	void setRay(int index, sf::RectangleShape ray);
+
 	void setRaySize(int index, float raySize);
 	float getMaxRayLength();
 
 	float getFov();
 	float getVerticalFov();
 
+	void setVerticalRotation(float angle);
+	float getVerticalRotation();
 };
 
