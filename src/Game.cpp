@@ -18,7 +18,7 @@ Game::~Game()
 void Game::initWindow()
 {
     this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Window");
-    this->window->setFramerateLimit(60);
+    this->window->setFramerateLimit(120);
 }
 
 /*-------------------------------------------------------------------------------*/

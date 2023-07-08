@@ -11,136 +11,15 @@ Player::Player(float windowWidth)
 
 	this->hitbox.setFillColor(sf::Color::Red);
 
-	this->hitbox.setOrigin(this->hitbox.getRadius(), this->hitbox.getRadius());
+	this->hitbox.setOrigin(this->getRadius(), this->getRadius());
 
-	this->speed = 1;
-
-	this->fov = 90.f;
+	this->horizontalFov = 90.f;
 
 	this->verticalFov = 58.75f;
 
 	this->initRays(windowWidth);
 
 	this->verticalRotation = 0;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
-{
-	window->setView(view);
-
-	window->draw(this->hitbox);
-
-	sf::VertexArray fovVisualization(sf::TriangleFan, 1 + this->rays.size());
-	fovVisualization[0].position = this->hitbox.getPosition();
-
-	for (int i = 0; i < this->rays.size(); i++)
-	{
-		float angle = (this->hitbox.getRotation() - this->fov / 2) + (i * this->fov / this->rays.size());
-		if (angle < 0) angle += 360;
-		if (angle > 360) angle -= 360;
-
-		fovVisualization[1 + i].position = sf::Vector2f(
-			this->hitbox.getPosition().x + rays[i] * cos(angle * 3.14f / 180.0f),
-			this->hitbox.getPosition().y + rays[i] * sin(angle * 3.14f / 180.0f));
-	}
-
-	window->draw(fovVisualization);
-	view.setCenter(this->hitbox.getPosition());
-}
-/*-------------------------------------------------------------------------------*/
-
-void Player::update()
-{
-	for (int i = 0; i < this->rays.size(); i++)
-	{
-		this->rays[i] = this->maxRayLength;
-	}
-}
-
-/*-------------------------------------------------------------------------------*/
-
-sf::Vector2f Player::move(std::string direction)
-{
-	sf::Vector2f move(0, 0);
-
-	if (direction == "FORWARD")
-	{
-		move.x = cos((this->hitbox.getRotation()) * 3.14f / 180.0f);
-		move.y = sin((this->hitbox.getRotation()) * 3.14f / 180.0f);
-	}
-	else if (direction == "RIGHT")
-	{
-		move.x = cos((this->hitbox.getRotation() + 90) * 3.14f / 180.0f);
-		move.y = sin((this->hitbox.getRotation() + 90) * 3.14f / 180.0f);
-	}
-	else if (direction == "LEFT")
-	{
-		move.x = cos((this->hitbox.getRotation() - 90) * 3.14f / 180.0f);
-		move.y = sin((this->hitbox.getRotation() - 90) * 3.14f / 180.0f);
-	}
-	else if (direction == "BACK")
-	{
-		move.x = -cos((this->hitbox.getRotation()) * 3.14f / 180.0f);
-		move.y = -sin((this->hitbox.getRotation()) * 3.14f / 180.0f);
-	}
-
-	return move;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Player::rotate(float sens)
-{
-	this->hitbox.rotate(sens);
-}
-
-/*-------------------------------------------------------------------------------*/
-
-float Player::getRotation()
-{
-	return this->hitbox.getRotation();
-}
-
-/*-------------------------------------------------------------------------------*/
-
-float Player::getSpeed()
-{
-	return this->speed;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Player::setRadius(float radius)
-{
-	this->radius = radius;
-}
-
-float Player::getRadius()
-{
-	return this->radius;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-sf::CircleShape Player::getHitbox()
-{
-	return this->hitbox;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-sf::Vector2f Player::getPosition()
-{
-	return this->hitbox.getPosition();
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Player::setPosition(float x, float y)
-{
-	this->hitbox.setPosition(x, y);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -154,10 +33,60 @@ void Player::initRays(float windowWidth)
 }
 
 /*-------------------------------------------------------------------------------*/
+// Getters
 
 std::vector<float> Player::getRays()
 {
 	return this->rays;
+}
+
+
+sf::Vector2f Player::getPosition()
+{
+	return this->hitbox.getPosition();
+}
+
+
+float Player::getRadius()
+{
+	return this->radius;
+}
+
+
+float Player::getMaxRayLength()
+{
+	return this->maxRayLength;
+}
+
+
+float Player::getHorizontalRotation()
+{
+	return this->hitbox.getRotation();
+}
+
+
+float Player::getVerticalRotation()
+{
+	return this->verticalRotation;
+}
+
+
+float Player::getHorizontalFov()
+{
+	return this->horizontalFov;
+}
+
+
+float Player::getVerticalFov()
+{
+	return this->verticalFov;
+}
+
+/*-------------------------------------------------------------------------------*/
+// Setters
+void Player::setPosition(float x, float y)
+{
+	this->hitbox.setPosition(x, y);
 }
 
 void Player::setRaySize(int index, float raySize)
@@ -166,37 +95,84 @@ void Player::setRaySize(int index, float raySize)
 }
 
 /*-------------------------------------------------------------------------------*/
+// Public methods
 
-float Player::getMaxRayLength()
+void Player::update()
 {
-	return this->maxRayLength;
+	for (int i = 0; i < this->rays.size(); i++)
+	{
+		this->rays[i] = this->maxRayLength;
+	}
 }
 
-float Player::getFov()
+/*---------------------------------------*/
+
+void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 {
-	return this->fov;
+	window->setView(view);
+
+	window->draw(this->hitbox);
+
+	sf::VertexArray fovVisualization(sf::TriangleFan, 1 + this->rays.size());
+	fovVisualization[0].position = this->getPosition();
+
+	for (int i = 0; i < this->rays.size(); i++)
+	{
+		float angle = fmod((this->getHorizontalRotation() - this->horizontalFov / 2) + (i * this->horizontalFov / this->rays.size()), 360);
+
+		fovVisualization[1 + i].position = sf::Vector2f(
+			this->getPosition().x + rays[i] * cos(Global::degToRad(angle)),
+			this->getPosition().y + rays[i] * sin(Global::degToRad(angle)));
+	}
+
+	window->draw(fovVisualization);
+	view.setCenter(this->getPosition());
 }
 
-float Player::getVerticalFov()
+/*---------------------------------------*/
+
+sf::Vector2f Player::getNextMove(std::string direction)
 {
-	return this->verticalFov;
+	sf::Vector2f move(0, 0);
+
+	if (direction == "FORWARD")
+	{
+		move.x = cos(Global::degToRad(this->getHorizontalRotation()));
+		move.y = sin(Global::degToRad(this->getHorizontalRotation()));
+	}
+	else if (direction == "RIGHT")
+
+	{
+		move.x = cos(Global::degToRad(this->getHorizontalRotation() + 90));
+		move.y = sin(Global::degToRad(this->getHorizontalRotation() + 90));
+	}
+	else if (direction == "LEFT")
+	{
+		move.x = cos(Global::degToRad(this->getHorizontalRotation() - 90));
+		move.y = sin(Global::degToRad(this->getHorizontalRotation() - 90));
+	}
+	else if (direction == "BACK")
+	{
+		move.x = -cos(Global::degToRad(this->getHorizontalRotation()));
+		move.y = -sin(Global::degToRad(this->getHorizontalRotation()));
+	}
+
+	return move;
+}
+
+/*---------------------------------------*/
+
+void Player::horizontallyRotate(float sens)
+{
+	this->hitbox.rotate(sens);
+}
+
+/*---------------------------------------*/
+
+void Player::verticallyRotate(float angle)
+{
+	this->verticalRotation = Global::clamp(this->verticalRotation + angle, -89, 89);
 }
 
 /*-------------------------------------------------------------------------------*/
 
-void Player::setVerticalRotation(float angle)
-{
-	if(angle < -89) angle = -89;
-	else if (angle > 89) angle = 89;
-
-	this->verticalRotation = angle;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-float Player::getVerticalRotation()
-{
-	return this->verticalRotation;
-}
-
-/*-------------------------------------------------------------------------------*/

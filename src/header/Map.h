@@ -5,6 +5,7 @@
 #include <cmath>
 #include "Player.h"
 #include "Tile.h"
+#include "Global.h"
 
 class Map
 {
@@ -18,11 +19,11 @@ private:
 public:
 	Map();
 
-	void update();
-	void movePlayer(std::shared_ptr<Player> player, std::string direction);
+	void update(Player& player);
+	void movePlayer(Player& player, std::string direction);
 	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
 
 	void convertMap(std::vector<std::vector<int>> intMap);
-	void updateFovContact(std::shared_ptr<Player> player);
+	void updateFovContact(Player& player);
 };
 

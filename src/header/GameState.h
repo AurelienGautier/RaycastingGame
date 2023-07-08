@@ -2,27 +2,26 @@
 #include "State.h"
 #include "Player.h"
 #include "Map.h"
+#include "Global.h"
 #include <iostream> // temporaire
 
 class GameState : public State
 {
 private:
-	std::shared_ptr<Player> player;
+	Player player;
 	Map map;
-	sf::Vector2i mousePosition;
 	sf::View gameplayView;
 	sf::View minimapView;
+	int const cellSize3d = 32;
 
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> gameWindow);
 
 	void update();
-	void updateInputs();
+	void updateKeyboardInputs();
 	void updateMouseInputs();
 
 	void render();
 	void render3d();
-
-	bool canMove(int x, int y);
 };
 

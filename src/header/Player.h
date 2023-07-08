@@ -3,54 +3,49 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <memory>
+#include <algorithm>
 
 #include "Tile.h"
+#include "Global.h"
 
 class Player
 {
 private:
+	// Attributes
 	sf::CircleShape hitbox;
-	float speed;
 	float radius;
 	std::vector<float> rays;
-	float fov;
+	float horizontalFov;
 	float verticalFov;
 	float const maxRayLength = 192;
 	float verticalRotation;
 
-public:
-	Player(float windowWidth);
-
-	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
-	void update();
-
-	sf::Vector2f move(std::string direction);
-
-	void rotate(float sens);
-	float getRotation();
-
-	float getSpeed();
-
-	void setRadius(float radius);
-	float getRadius();
-
-	sf::CircleShape getHitbox();
-
-	sf::Vector2f getPosition();
-	void setPosition(float x, float y);
-
+	// Private methods
 	void initRays(float windowWidth);
 
+public:
+	// Constructors
+	Player(float windowWidth);
+
+	// Getters
 	std::vector<float> getRays();
-	void setRay(int index, sf::RectangleShape ray);
-
-	void setRaySize(int index, float raySize);
+	sf::Vector2f getPosition();
+	float getRadius();
 	float getMaxRayLength();
-
-	float getFov();
+	float getHorizontalRotation();
+	float getVerticalRotation();
+	float getHorizontalFov();
 	float getVerticalFov();
 
-	void setVerticalRotation(float angle);
-	float getVerticalRotation();
+	// Setters
+	void setPosition(float x, float y);
+	void setRaySize(int index, float raySize);
+
+	// Public methods
+	void update();
+	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
+	sf::Vector2f getNextMove(std::string direction);
+	void horizontallyRotate(float sens);
+	void verticallyRotate(float angle);
 };
 

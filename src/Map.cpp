@@ -31,8 +31,9 @@ Map::Map()
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::update()
+void Map::update(Player& player)
 {
+	this->updateFovContact(player);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -52,37 +53,37 @@ void Map::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::movePlayer(std::shared_ptr<Player> player, std::string direction)
+void Map::movePlayer(Player& player, std::string direction)
 {
-	sf::Vector2f move = player->move(direction);
-	sf::Vector2f playerPosition(player->getPosition().x - player->getRadius(), player->getPosition().y - player->getRadius());
+	sf::Vector2f move = player.getNextMove(direction);
+	sf::Vector2f playerPosition(player.getPosition().x - player.getRadius(), player.getPosition().y - player.getRadius());
 
 	if(canPlayerMove(playerPosition, move))
 	{
-		player->setPosition(
-			player->getPosition().x + move.x,
-			player->getPosition().y + move.y
+		player.setPosition(
+			player.getPosition().x + move.x,
+			player.getPosition().y + move.y
 		);
 	}
 	else if(canPlayerMove(playerPosition, sf::Vector2f(move.x, 0)))
 	{
-		player->setPosition(
-			player->getPosition().x + move.x,
-			player->getPosition().y
+		player.setPosition(
+			player.getPosition().x + move.x,
+			player.getPosition().y
 		);
 	}
 	else if(canPlayerMove(playerPosition, sf::Vector2f(0, move.y)))
 	{
-		player->setPosition(
-			player->getPosition().x,
-			player->getPosition().y + move.y
+		player.setPosition(
+			player.getPosition().x,
+			player.getPosition().y + move.y
 		);
 	}
 	else 
 	{
-		player->setPosition(
-			round(player->getPosition().x) ,
-			round(player->getPosition().y)  
+		player.setPosition(
+			round(player.getPosition().x) ,
+			round(player.getPosition().y)  
 		);
 	}
 }
@@ -134,23 +135,23 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::updateFovContact(std::shared_ptr<Player> player)
+void Map::updateFovContact(Player& player)
 {
-	std::vector<float> rays = player->getRays();
+	std::vector<float> rays = player.getRays();
 
 	for (int i = 0; i < rays.size(); i++)
 	{
 		float rayLength = 0;
-		sf::Vector2f startPoint = player->getPosition();
+		sf::Vector2f startPoint = player.getPosition();
 		bool wallMet = false;
 		int raySize = rays[i];
 
-		float angle = (player->getHitbox().getRotation() - player->getFov() / 2) + (i * player->getFov() / rays.size());
+		float angle = (player.getHorizontalRotation() - player.getHorizontalFov() / 2) + (i * player.getHorizontalFov() / rays.size());
 
 		if(angle < 0) angle += 360;
 		else if(angle >= 360) angle -= 360;
 
-		float slope = tan(angle * 3.14f / 180.0f);
+		float slope = tan(Global::degToRad(angle));
 
 		while (rayLength < raySize && !wallMet) 
 		{
@@ -183,20 +184,20 @@ void Map::updateFovContact(std::shared_ptr<Player> player)
 				rayLength += deltaY * deltaFactor.y;
 				nextCellY += deltaFactor.y;
 			}
-			// Si la prochaine case est verticale
+			// If the next cell is vertical
 			else if (deltaX * slope * deltaFactor.y > deltaY * deltaFactor.y) {
 				startPoint.x += deltaY / slope;
 				startPoint.y += deltaY;
 
-				rayLength += deltaY / sin(angle * 3.14f / 180.0f);
+				rayLength += deltaY / sin(Global::degToRad(angle));
 				nextCellY += deltaFactor.y;
 			}
-			else // Si la prochaine case est horizontale
+			else // If the next cell is horizontal
 			{
 				startPoint.x += deltaX;
 				startPoint.y += deltaX * slope;
 
-				rayLength += deltaX / cos(angle * 3.14f / 180.0f);
+				rayLength += deltaX / cos(Global::degToRad(angle));
 				nextCellX += deltaFactor.x;
 			}
 
@@ -205,7 +206,7 @@ void Map::updateFovContact(std::shared_ptr<Player> player)
 				if (this->cells[nextCellY][nextCellX].getNum() == 1)
 				{
 					wallMet = true;
-					player->setRaySize(i, rayLength);
+					player.setRaySize(i, rayLength);
 				}
 			}
 		}
