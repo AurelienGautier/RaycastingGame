@@ -24,15 +24,10 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow) :
 
 void GameState::update() 
 {
-	// std::cout << "test1" << std::endl;
 	this->updateKeyboardInputs();
-	// std::cout << "test2" << std::endl;
 	this->updateMouseInputs();
-	// std::cout << "test3" << std::endl;
 	this->player.update();
-	// std::cout << "test4" << std::endl;
 	this->map.update(this->player);
-	// std::cout << "test5" << std::endl << std::endl;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -86,23 +81,28 @@ void GameState::render3d()
 
 	std::vector<float> rays = this->player.getRays();
 
-	float projectionDistance = cellSize3d / tan(Global::degToRad(this->player.getVerticalFov() / 2));
+	float projectionDistance = cellSize3d / Global::tangent(this->player.getVerticalFov() / 2);
 
 	float screenWidth = this->window->getSize().x;
 	float screenHeight = this->window->getSize().y;
 
-	float floorLevel = round(screenHeight / 2 * (1 + tan(Global::degToRad(this->player.getVerticalRotation())) / tan(Global::degToRad(this->player.getVerticalFov() / 2))));
+	float floorLevel = round(screenHeight / 2 * (1 + Global::tangent(this->player.getVerticalRotation()) / Global::tangent(this->player.getVerticalFov() / 2)));
 
 	for (int i = 0; i < screenWidth; i++)
 	{
 		if (rays[i] < this->player.getMaxRayLength())
 		{
 			float rayAngle = this->player.getHorizontalFov() * (floor(screenWidth) / 2 - i) / (screenWidth - 1);
-			float shapeHeight = screenHeight * projectionDistance / (rays[i] * cos(Global::degToRad(rayAngle)));
+			float rayProjectionPosition = Global::tangent(rayAngle) / 2 / Global::tangent(this->player.getHorizontalFov() / 2);
+
+			float shapeHeight = screenHeight * projectionDistance / (rays[i] * Global::cosine(rayAngle));
+
+			int shapePosX = round(screenWidth * (0.5f - rayProjectionPosition));
+			int shapePosY = floorLevel - shapeHeight / 2;
 
 			sf::RectangleShape shape(sf::Vector2f(1, shapeHeight));
 			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
-			shape.setPosition(i, floorLevel - shapeHeight / 2);
+			shape.setPosition(shapePosX, shapePosY);
 
 			this->window->draw(shape);
 		}

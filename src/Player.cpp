@@ -121,8 +121,8 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 		float angle = fmod((this->getHorizontalRotation() - this->horizontalFov / 2) + (i * this->horizontalFov / this->rays.size()), 360);
 
 		fovVisualization[1 + i].position = sf::Vector2f(
-			this->getPosition().x + rays[i] * cos(Global::degToRad(angle)),
-			this->getPosition().y + rays[i] * sin(Global::degToRad(angle)));
+			this->getPosition().x + rays[i] * Global::cosine(angle),
+			this->getPosition().y + rays[i] * Global::sinus(angle));
 	}
 
 	window->draw(fovVisualization);
@@ -137,24 +137,24 @@ sf::Vector2f Player::getNextMove(std::string direction)
 
 	if (direction == "FORWARD")
 	{
-		move.x = cos(Global::degToRad(this->getHorizontalRotation()));
-		move.y = sin(Global::degToRad(this->getHorizontalRotation()));
+		move.x = Global::cosine(this->getHorizontalRotation());
+		move.y = Global::sinus(this->getHorizontalRotation());
 	}
 	else if (direction == "RIGHT")
 
 	{
-		move.x = cos(Global::degToRad(this->getHorizontalRotation() + 90));
-		move.y = sin(Global::degToRad(this->getHorizontalRotation() + 90));
+		move.x = Global::cosine(this->getHorizontalRotation() + 90);
+		move.y = Global::sinus(this->getHorizontalRotation() + 90);
 	}
 	else if (direction == "LEFT")
 	{
-		move.x = cos(Global::degToRad(this->getHorizontalRotation() - 90));
-		move.y = sin(Global::degToRad(this->getHorizontalRotation() - 90));
+		move.x = Global::cosine(this->getHorizontalRotation() - 90);
+		move.y = Global::sinus(this->getHorizontalRotation() - 90);
 	}
 	else if (direction == "BACK")
 	{
-		move.x = -cos(Global::degToRad(this->getHorizontalRotation()));
-		move.y = -sin(Global::degToRad(this->getHorizontalRotation()));
+		move.x = -Global::cosine(this->getHorizontalRotation());
+		move.y = -Global::sinus(this->getHorizontalRotation());
 	}
 
 	return move;

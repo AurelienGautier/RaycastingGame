@@ -151,7 +151,7 @@ void Map::updateFovContact(Player& player)
 		if(angle < 0) angle += 360;
 		else if(angle >= 360) angle -= 360;
 
-		float slope = tan(Global::degToRad(angle));
+		float slope = Global::tangent(angle);
 
 		while (rayLength < raySize && !wallMet) 
 		{
@@ -189,7 +189,7 @@ void Map::updateFovContact(Player& player)
 				startPoint.x += deltaY / slope;
 				startPoint.y += deltaY;
 
-				rayLength += deltaY / sin(Global::degToRad(angle));
+				rayLength += deltaY / Global::sinus(angle);
 				nextCellY += deltaFactor.y;
 			}
 			else // If the next cell is horizontal
@@ -197,7 +197,7 @@ void Map::updateFovContact(Player& player)
 				startPoint.x += deltaX;
 				startPoint.y += deltaX * slope;
 
-				rayLength += deltaX / cos(Global::degToRad(angle));
+				rayLength += deltaX / Global::cosine(angle);
 				nextCellX += deltaFactor.x;
 			}
 
