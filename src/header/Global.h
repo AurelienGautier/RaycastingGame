@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-class Global
+class Glb
 {
 public:
     static float degToRad(float angle);

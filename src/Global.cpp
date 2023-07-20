@@ -1,29 +1,29 @@
 #include "header/Global.h"
 #include <iostream>
 
-float Global::degToRad(float angle)
+float Glb::degToRad(float angle)
 {
     return angle / 180 * 3.14;
 }
 
-float Global::clamp(float value, float minValue, float maxValue)
+float Glb::clamp(float value, float minValue, float maxValue)
 {
     if(value < minValue) return minValue;
     if(value > maxValue) return maxValue;
     return value;
 }
 
-float Global::tangent(float angle)
+float Glb::tangent(float angle)
 {
-    return tan(Global::degToRad(angle));
+    return tan(Glb::degToRad(angle));
 }
 
-float Global::cosine(float angle)
+float Glb::cosine(float angle)
 {
-    return cos(Global::degToRad(angle));
+    return cos(Glb::degToRad(angle));
 }
 
-float Global::sinus(float angle)
+float Glb::sinus(float angle)
 {
-    return sin(Global::degToRad(angle));
+    return sin(Glb::degToRad(angle));
 }

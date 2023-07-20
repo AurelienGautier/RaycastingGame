@@ -81,30 +81,42 @@ void GameState::render3d()
 
 	std::vector<float> rays = this->player.getRays();
 
-	float projectionDistance = cellSize3d / Global::tangent(this->player.getVerticalFov() / 2);
+	float projectionDistance = cellSize3d / Glb::tangent(this->player.getVerticalFov() / 2);
 
 	float screenWidth = this->window->getSize().x;
 	float screenHeight = this->window->getSize().y;
 
-	float floorLevel = round(screenHeight / 2 * (1 + Global::tangent(this->player.getVerticalRotation()) / Global::tangent(this->player.getVerticalFov() / 2)));
+	float floorLevel = round(screenHeight / 2 * (1 + Glb::tangent(this->player.getVerticalRotation()) / Glb::tangent(this->player.getVerticalFov() / 2)));
+
+	int previousColumn = INT8_MIN;
 
 	for (int i = 0; i < screenWidth; i++)
 	{
 		if (rays[i] < this->player.getMaxRayLength())
 		{
 			float rayAngle = this->player.getHorizontalFov() * (floor(screenWidth) / 2 - i) / (screenWidth - 1);
-			float rayProjectionPosition = Global::tangent(rayAngle) / 2 / Global::tangent(this->player.getHorizontalFov() / 2);
-
-			float shapeHeight = screenHeight * projectionDistance / (rays[i] * Global::cosine(rayAngle));
+			float rayProjectionPosition = Glb::tangent(rayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
 
 			int shapePosX = round(screenWidth * (0.5f - rayProjectionPosition));
-			int shapePosY = floorLevel - shapeHeight / 2;
+			int nextColumn = screenWidth;
 
-			sf::RectangleShape shape(sf::Vector2f(1, shapeHeight));
-			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
-			shape.setPosition(shapePosX, shapePosY);
+			if(i < screenWidth - 1)
+			{
+				float nextRayAngle = this->player.getHorizontalFov() * (floor(screenWidth) / 2 - 1 - i) / (screenWidth - 1);
+				rayProjectionPosition = Glb::tangent(nextRayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
+				nextColumn = round(screenWidth * (0.5f - rayProjectionPosition));
+			}
+			if(previousColumn < shapePosX)
+			{
+				float shapeHeight = screenHeight * projectionDistance / (rays[i] * Glb::cosine(rayAngle));
+				int shapePosY = floorLevel - shapeHeight / 2;
 
-			this->window->draw(shape);
+				sf::RectangleShape shape(sf::Vector2f(std::max(1, nextColumn - shapePosX), shapeHeight));
+				shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
+				shape.setPosition(shapePosX, shapePosY);
+
+				this->window->draw(shape);
+			}
 		}
 	}
 }

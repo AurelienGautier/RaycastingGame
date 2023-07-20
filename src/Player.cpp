@@ -15,7 +15,7 @@ Player::Player(float windowWidth)
 
 	this->horizontalFov = 90.f;
 
-	this->verticalFov = 58.75f;
+	this->verticalFov = 60.f;
 
 	this->initRays(windowWidth);
 
@@ -121,8 +121,8 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 		float angle = fmod((this->getHorizontalRotation() - this->horizontalFov / 2) + (i * this->horizontalFov / this->rays.size()), 360);
 
 		fovVisualization[1 + i].position = sf::Vector2f(
-			this->getPosition().x + rays[i] * Global::cosine(angle),
-			this->getPosition().y + rays[i] * Global::sinus(angle));
+			this->getPosition().x + rays[i] * Glb::cosine(angle),
+			this->getPosition().y + rays[i] * Glb::sinus(angle));
 	}
 
 	window->draw(fovVisualization);
@@ -137,24 +137,24 @@ sf::Vector2f Player::getNextMove(std::string direction)
 
 	if (direction == "FORWARD")
 	{
-		move.x = Global::cosine(this->getHorizontalRotation());
-		move.y = Global::sinus(this->getHorizontalRotation());
+		move.x = Glb::cosine(this->getHorizontalRotation());
+		move.y = Glb::sinus(this->getHorizontalRotation());
 	}
 	else if (direction == "RIGHT")
 
 	{
-		move.x = Global::cosine(this->getHorizontalRotation() + 90);
-		move.y = Global::sinus(this->getHorizontalRotation() + 90);
+		move.x = Glb::cosine(this->getHorizontalRotation() + 90);
+		move.y = Glb::sinus(this->getHorizontalRotation() + 90);
 	}
 	else if (direction == "LEFT")
 	{
-		move.x = Global::cosine(this->getHorizontalRotation() - 90);
-		move.y = Global::sinus(this->getHorizontalRotation() - 90);
+		move.x = Glb::cosine(this->getHorizontalRotation() - 90);
+		move.y = Glb::sinus(this->getHorizontalRotation() - 90);
 	}
 	else if (direction == "BACK")
 	{
-		move.x = -Global::cosine(this->getHorizontalRotation());
-		move.y = -Global::sinus(this->getHorizontalRotation());
+		move.x = -Glb::cosine(this->getHorizontalRotation());
+		move.y = -Glb::sinus(this->getHorizontalRotation());
 	}
 
 	return move;
@@ -171,7 +171,7 @@ void Player::horizontallyRotate(float sens)
 
 void Player::verticallyRotate(float angle)
 {
-	this->verticalRotation = Global::clamp(this->verticalRotation + angle, -89, 89);
+	this->verticalRotation = Glb::clamp(this->verticalRotation + angle, -89, 89);
 }
 
 /*-------------------------------------------------------------------------------*/
