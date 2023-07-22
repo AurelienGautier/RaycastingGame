@@ -3,30 +3,7 @@
 
 Map::Map()
 {
-	this->convertMap ( 
-		{ {
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-		} }
-	);
+	this->getMapFromFile();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -43,7 +20,8 @@ void Map::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 	window->setView(view);
 
 	for (int i = 0; i < this->cells.size(); i++)
-	{
+	{		for (int j = 0; j < this->cells[0].size(); j++)
+
 		for (int j = 0; j < this->cells[0].size(); j++)
 		{
 			window->draw(this->cells[i][j].getHitbox());
@@ -117,6 +95,36 @@ bool Map::canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove)
 	if(this->isWall(this->cells[y][x])) return false;
 
 	return true;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Map::getMapFromFile()
+{
+	std::ifstream mapFile("res/map/level2");
+
+	char charRead;
+
+	std::vector<std::vector<int>> map;
+	std::vector<int> currentLine;
+
+	while(mapFile.get(charRead))
+	{
+		int number;
+
+		if(charRead >= '0' && charRead <= '9')
+		{
+			number = charRead - 48;
+			currentLine.push_back(number);
+		}
+		else if (charRead == '\n')
+		{
+			map.push_back(currentLine);
+			currentLine.clear();
+		}
+	}
+
+	this->convertMap(map);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -201,7 +209,7 @@ float Map::getRaySize(Player &player, int ray)
 			rayLength += delta.x / Glb::cosine(angle);
 			nextCell.x += deltaFactor.x;
 		}
-
+		
 		if (rayLength <= maxRaySize && this->isWall(this->cells[nextCell.y][nextCell.x]))
 		{
 			wallMet = true;
