@@ -2,6 +2,14 @@
 
 #include <cmath>
 
+enum class Direction 
+{
+    FORWARD = 0,
+    LEFT,
+    BACK,
+    RIGHT
+};
+
 class Glb
 {
 public:

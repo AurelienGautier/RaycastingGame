@@ -1,28 +1,31 @@
 #include "header/Player.h"
 #include <iostream>
 
-Player::Player(float windowWidth)
+Player::Player(float windowWidth) :
+	radius(8), 
+	maxRayLength(400),
+	horizontalFov(90.f),
+	verticalFov(60.f),
+	verticalRotation(0) 
 {
-	this->radius = 8;
+	this->initHitbox();
 
+	this->initRays(windowWidth);
+}
+
+/*-------------------------------------------------------------------------------*/
+// Initialization methods
+
+void Player::initHitbox()
+{
 	this->hitbox.setRadius(this->radius);
 
 	this->hitbox.setPosition(sf::Vector2f(32, 32));
 
 	this->hitbox.setFillColor(sf::Color::Red);
 
-	this->hitbox.setOrigin(this->getRadius(), this->getRadius());
-
-	this->horizontalFov = 90.f;
-
-	this->verticalFov = 60.f;
-
-	this->initRays(windowWidth);
-
-	this->verticalRotation = 0;
+	this->hitbox.setOrigin(this->radius, this->radius);
 }
-
-/*-------------------------------------------------------------------------------*/
 
 void Player::initRays(float windowWidth)
 {
@@ -118,7 +121,7 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 
 	for (int i = 0; i < this->rays.size(); i++)
 	{
-		float angle = fmod((this->getHorizontalRotation() - this->horizontalFov / 2) + (i * this->horizontalFov / this->rays.size()), 360);
+		float angle = this->calculateRayAngle(i);
 
 		fovVisualization[1 + i].position = sf::Vector2f(
 			this->getPosition().x + rays[i] * Glb::cosine(angle),
@@ -131,30 +134,31 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 
 /*---------------------------------------*/
 
-sf::Vector2f Player::getNextMove(std::string direction)
+sf::Vector2f Player::getNextMove(Direction direction)
 {
 	sf::Vector2f move(0, 0);
 
-	if (direction == "FORWARD")
+	switch(direction)
 	{
-		move.x = Glb::cosine(this->getHorizontalRotation());
-		move.y = Glb::sinus(this->getHorizontalRotation());
-	}
-	else if (direction == "RIGHT")
+		case Direction::FORWARD:
+			move.x = Glb::cosine(this->getHorizontalRotation());
+			move.y = Glb::sinus(this->getHorizontalRotation());
+			break;
 
-	{
-		move.x = Glb::cosine(this->getHorizontalRotation() + 90);
-		move.y = Glb::sinus(this->getHorizontalRotation() + 90);
-	}
-	else if (direction == "LEFT")
-	{
-		move.x = Glb::cosine(this->getHorizontalRotation() - 90);
-		move.y = Glb::sinus(this->getHorizontalRotation() - 90);
-	}
-	else if (direction == "BACK")
-	{
-		move.x = -Glb::cosine(this->getHorizontalRotation());
-		move.y = -Glb::sinus(this->getHorizontalRotation());
+		case Direction::LEFT:
+			move.x = Glb::cosine(this->getHorizontalRotation() - 90);
+			move.y = Glb::sinus(this->getHorizontalRotation() - 90);
+			break;
+
+		case Direction::BACK:
+			move.x = -Glb::cosine(this->getHorizontalRotation());
+			move.y = -Glb::sinus(this->getHorizontalRotation());
+			break;
+
+		case Direction::RIGHT:
+			move.x = Glb::cosine(this->getHorizontalRotation() + 90);
+			move.y = Glb::sinus(this->getHorizontalRotation() + 90);
+			break;
 	}
 
 	return move;
@@ -176,3 +180,17 @@ void Player::verticallyRotate(float angle)
 
 /*-------------------------------------------------------------------------------*/
 
+float Player::calculateRayAngle(int rayIndex)
+{
+	float playerFovStart = this->getHorizontalRotation() - this->horizontalFov / 2;
+	float rayPerDegree = this->horizontalFov / this->rays.size();
+
+	float angle = playerFovStart + rayPerDegree * rayIndex;
+
+	if(angle < 0) angle += 360;
+	else if(angle >= 360) angle -= 360;
+
+	return angle;
+}
+
+/*-------------------------------------------------------------------------------*/

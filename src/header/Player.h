@@ -17,10 +17,11 @@ private:
 	std::vector<float> rays;
 	float horizontalFov;
 	float verticalFov;
-	float const maxRayLength = 192;
+	float maxRayLength;
 	float verticalRotation;
 
 	// Private methods
+	void initHitbox();
 	void initRays(float windowWidth);
 
 public:
@@ -44,8 +45,9 @@ public:
 	// Public methods
 	void update();
 	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
-	sf::Vector2f getNextMove(std::string direction);
+	sf::Vector2f getNextMove(Direction direction);
 	void horizontallyRotate(float sens);
 	void verticallyRotate(float angle);
+	float calculateRayAngle(int rayIndex);
 };
 
