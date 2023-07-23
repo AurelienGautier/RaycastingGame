@@ -4,7 +4,7 @@
 Game::Game()
 {
     this->initWindow();
-    this->gameState = std::make_shared<GameState>(this->window);
+    this->initStates();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -19,6 +19,18 @@ void Game::initWindow()
 {
     this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Window");
     this->window->setFramerateLimit(120);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Game::initStates()
+{
+    this->currentStates = std::make_shared<std::map<States, std::unique_ptr<State>>>();
+
+    State::currentState = States::GAMESTATE;
+
+    (*this->currentStates)[States::MAINMENUSTATE] = std::make_unique<MainMenuState>(this->window, this->currentStates);
+    (*this->currentStates)[States::GAMESTATE] = std::make_unique<GameState>(this->window, this->currentStates);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -38,7 +50,9 @@ void Game::update()
 {
     this->updateEvents();
 
-    this->gameState->update();
+    (*this->currentStates)[State::currentState]->update();
+
+    // this->gameState->update();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -58,7 +72,9 @@ void Game::render()
 {
     this->window->clear();
 
-    this->gameState->render();
+    (*this->currentStates)[State::currentState]->render();
+
+    // this->gameState->render();
 
     this->window->display();
 }

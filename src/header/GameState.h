@@ -15,7 +15,7 @@ private:
 	int const cellSize3d = 32;
 
 public:
-	GameState(std::shared_ptr<sf::RenderWindow> gameWindow);
+	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states);
 
 	void update();
 	void updateKeyboardInputs();

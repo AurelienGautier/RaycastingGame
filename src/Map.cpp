@@ -101,7 +101,7 @@ bool Map::canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove)
 
 void Map::getMapFromFile()
 {
-	std::ifstream mapFile("res/map/level2");
+	std::ifstream mapFile("res/map/level1");
 
 	char charRead;
 

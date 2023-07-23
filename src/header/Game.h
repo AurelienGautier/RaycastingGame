@@ -4,21 +4,24 @@
 #include <array>
 #include <string>
 #include <memory>
+
 #include "State.h"
 #include "GameState.h"
+#include "MainMenuState.h"
 
 class Game
 {
 private:
 	std::shared_ptr<sf::RenderWindow> window;
 	sf::Event event;
-	std::shared_ptr<GameState> gameState;
+	std::shared_ptr<std::map<States, std::unique_ptr<State>>> currentStates;
 
 public:
 	Game();
 	~Game();
 
 	void initWindow();
+	void initStates();
 
 	void run();
 
