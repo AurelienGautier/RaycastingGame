@@ -8,3 +8,21 @@ State::State(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::
 	this->window = gameWindow;
 	this->currentStates = states;
 }
+
+bool State::isKeyPressed(bool& keyPressed, bool sfKeyPressed)
+{
+	if(keyPressed)
+    {
+        if(!sfKeyPressed)
+        {
+            keyPressed = false;
+        }
+    }
+    else if(sfKeyPressed)
+    {
+        keyPressed = true;
+        return true;
+    }
+
+    return false;
+}

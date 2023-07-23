@@ -1,8 +1,11 @@
 #pragma once
+
 #include "State.h"
 #include "Player.h"
 #include "Map.h"
 #include "Global.h"
+#include "PauseMenuState.h"
+
 #include <iostream> // temporaire
 
 class GameState : public State
@@ -13,6 +16,7 @@ private:
 	sf::View gameplayView;
 	sf::View minimapView;
 	int const cellSize3d = 32;
+	bool isEscapePressed;
 
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states);

@@ -2,7 +2,8 @@
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) : 
 	State(gameWindow, states),
-	player(gameWindow->getSize().x)
+	player(gameWindow->getSize().x),
+	isEscapePressed(false)
 {
 	this->window->setMouseCursorVisible(false);
 
@@ -43,6 +44,10 @@ void GameState::updateKeyboardInputs()
 		this->map.movePlayer(this->player, Direction::LEFT);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		this->map.movePlayer(this->player, Direction::BACK);
+
+	// pause
+	if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
+		State::currentState = States::PAUSEMENUSTATE;
 }
 
 /*-------------------------------------------------------------------------------*/

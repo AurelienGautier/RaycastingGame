@@ -10,7 +10,7 @@ void MainMenuState::update()
 {
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-
+        State::currentState = States::GAMESTATE;
     }
 }
 

@@ -8,6 +8,7 @@
 #include "State.h"
 #include "GameState.h"
 #include "MainMenuState.h"
+#include "PauseMenuState.h"
 
 class Game
 {
