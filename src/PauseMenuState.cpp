@@ -1,15 +1,18 @@
 #include "header/PauseMenuState.h"
+#include <iostream>
 
 PauseMenuState::PauseMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
     State(gameWindow, states),
-    isEscapePressed(false)
+    isEscapePressed(true)
 {
 }
 
 void PauseMenuState::update()
 {
     if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
-		State::currentState = States::GAMESTATE;
+    {
+		this->changeState(States::GAMESTATE);
+    }
 }
 
 void PauseMenuState::render()

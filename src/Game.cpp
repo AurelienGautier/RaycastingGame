@@ -27,8 +27,6 @@ void Game::initStates()
 {
     this->currentStates = std::make_shared<std::map<States, std::unique_ptr<State>>>();
 
-    State::currentState = States::MAINMENUSTATE;
-
     (*this->currentStates)[States::MAINMENUSTATE] = std::make_unique<MainMenuState>(this->window, this->currentStates);
     (*this->currentStates)[States::GAMESTATE] = std::make_unique<GameState>(this->window, this->currentStates);
     (*this->currentStates)[States::PAUSEMENUSTATE] = std::make_unique<PauseMenuState>(this->window, this->currentStates);

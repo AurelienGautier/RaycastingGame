@@ -3,10 +3,8 @@
 GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) : 
 	State(gameWindow, states),
 	player(gameWindow->getSize().x),
-	isEscapePressed(false)
+	isEscapePressed(true)
 {
-	this->window->setMouseCursorVisible(false);
-
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
 
 	sf::Mouse::setPosition(sf::Vector2i(windowCenter.x, windowCenter.y), *this->window);
@@ -25,6 +23,8 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_p
 
 void GameState::update() 
 {
+	this->window->setMouseCursorVisible(false);
+
 	this->updateKeyboardInputs();
 	this->updateMouseInputs();
 	this->player.update();
@@ -47,7 +47,9 @@ void GameState::updateKeyboardInputs()
 
 	// pause
 	if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
-		State::currentState = States::PAUSEMENUSTATE;
+	{
+		this->changeState(States::PAUSEMENUSTATE);
+	}
 }
 
 /*-------------------------------------------------------------------------------*/

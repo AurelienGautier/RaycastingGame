@@ -26,3 +26,10 @@ bool State::isKeyPressed(bool& keyPressed, bool sfKeyPressed)
 
     return false;
 }
+
+void State::changeState(States newState)
+{
+    sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
+
+    State::currentState = newState;
+}

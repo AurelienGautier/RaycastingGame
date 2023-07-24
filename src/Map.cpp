@@ -20,8 +20,7 @@ void Map::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 	window->setView(view);
 
 	for (int i = 0; i < this->cells.size(); i++)
-	{		for (int j = 0; j < this->cells[0].size(); j++)
-
+	{
 		for (int j = 0; j < this->cells[0].size(); j++)
 		{
 			window->draw(this->cells[i][j].getHitbox());
