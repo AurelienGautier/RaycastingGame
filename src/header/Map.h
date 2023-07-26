@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <fstream>
@@ -32,7 +31,7 @@ public:
 
 	void update(Player& player);
 	void movePlayer(Player& player, Direction direction);
-	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
+	void render(sf::RenderWindow& window, sf::View& view);
 
 	void updateFovContact(Player& player);
 };

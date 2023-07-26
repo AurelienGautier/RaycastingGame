@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <memory>
 
 class Button
 {
@@ -20,7 +19,7 @@ public:
 
     void update();
 
-    void render(std::shared_ptr<sf::RenderWindow> window);
+    void render(sf::RenderWindow& window);
 
     bool isClicked(sf::Vector2f mousePosition);
 };

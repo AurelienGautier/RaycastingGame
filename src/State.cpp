@@ -1,5 +1,4 @@
 #include "header/State.h"
-#include <iostream>
 
 States State::currentState = States::MAINMENUSTATE;
 

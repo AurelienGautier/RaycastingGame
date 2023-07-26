@@ -1,5 +1,4 @@
 #include "header/Map.h"
-#include <iostream>
 
 Map::Map()
 {
@@ -15,15 +14,15 @@ void Map::update(Player& player)
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
+void Map::render(sf::RenderWindow& window, sf::View& view)
 {
-	window->setView(view);
+	window.setView(view);
 
 	for (int i = 0; i < this->cells.size(); i++)
 	{
 		for (int j = 0; j < this->cells[0].size(); j++)
 		{
-			window->draw(this->cells[i][j].getHitbox());
+			window.draw(this->cells[i][j].getHitbox());
 		}
 	}
 }
@@ -259,9 +258,9 @@ sf::Vector2f Map::getDelta(sf::Vector2f cellPos, sf::Vector2i deltaFactor, sf::V
 		(cellPos.y + deltaFactor.y) * this->cellSize - startPoint.y
 	);
 
-	if (delta.y < 0 && delta.y != -cellSize)
+	if (delta.y <= 0 && delta.y != -cellSize)
 		delta.y += this->cellSize;
-	if (delta.x < 0 && delta.x != -cellSize)
+	if (delta.x <= 0 && delta.x != -cellSize)
 		delta.x += this->cellSize;
 
 	return delta;

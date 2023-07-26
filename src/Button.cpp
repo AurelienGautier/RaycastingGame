@@ -1,5 +1,4 @@
 #include "header/Button.h"
-#include <iostream>
 
 Button::Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize) :
     textString(text),
@@ -27,9 +26,9 @@ void Button::update()
     this->text.setPosition(this->button.left, this->button.top);
 }
 
-void Button::render(std::shared_ptr<sf::RenderWindow> window)
+void Button::render(sf::RenderWindow& window)
 {
-    sf::Vector2f mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+    sf::Vector2f mousePosition = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
     this->text.setFillColor(sf::Color::White);
 
@@ -44,10 +43,10 @@ void Button::render(std::shared_ptr<sf::RenderWindow> window)
 
         this->text.setFillColor(sf::Color::Black);
 
-        window->draw(rectangle);
+        window.draw(rectangle);
     }
 
-    window->draw(this->text);
+    window.draw(this->text);
 }
 
 bool Button::isCursorOn(sf::Vector2f mousePosition)

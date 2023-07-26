@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include <memory>
 #include <algorithm>
 
 #include "Tile.h"
@@ -44,7 +43,7 @@ public:
 
 	// Public methods
 	void update();
-	void render(std::shared_ptr<sf::RenderWindow> window, sf::View& view);
+	void render(sf::RenderWindow& window, sf::View& view);
 	sf::Vector2f getNextMove(Direction direction);
 	void horizontallyRotate(float sens);
 	void verticallyRotate(float angle);

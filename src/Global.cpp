@@ -1,5 +1,4 @@
 #include "header/Global.h"
-#include <iostream>
 
 float Glb::degToRad(float angle)
 {

@@ -1,5 +1,4 @@
 #include "header/Player.h"
-#include <iostream>
 
 Player::Player(float windowWidth) :
 	radius(8), 
@@ -110,11 +109,11 @@ void Player::update()
 
 /*---------------------------------------*/
 
-void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
+void Player::render(sf::RenderWindow& window, sf::View& view)
 {
-	window->setView(view);
+	window.setView(view);
 
-	window->draw(this->hitbox);
+	window.draw(this->hitbox);
 
 	sf::VertexArray fovVisualization(sf::TriangleFan, 1 + this->rays.size());
 	fovVisualization[0].position = this->getPosition();
@@ -128,7 +127,7 @@ void Player::render(std::shared_ptr<sf::RenderWindow> window, sf::View& view)
 			this->getPosition().y + rays[i] * Glb::sinus(angle));
 	}
 
-	window->draw(fovVisualization);
+	window.draw(fovVisualization);
 	view.setCenter(this->getPosition());
 }
 

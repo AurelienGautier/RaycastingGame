@@ -6,8 +6,6 @@
 #include "Global.h"
 #include "PauseMenuState.h"
 
-#include <iostream> // temporaire
-
 class GameState : public State
 {
 private:

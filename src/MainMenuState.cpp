@@ -1,13 +1,20 @@
 #include "header/MainMenuState.h"
-#include <iostream>
 
 MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
     State(gameWindow, states),
-    playButton(sf::Vector2f(200, 200), "Play", 32)
+    playButton(sf::Vector2f(200, 200), "Play", 32),
+    leaveButton(sf::Vector2f(200, 300), "Quit", 32)
 {
 }
 
 void MainMenuState::update()
+{
+    this->window->setMouseCursorVisible(true);
+
+    this->updateButtons();
+}
+
+void MainMenuState::updateButtons()
 {
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 
@@ -17,9 +24,17 @@ void MainMenuState::update()
     {
         this->changeState(States::GAMESTATE);
     }
+
+    this->leaveButton.update();
+
+    if(this->leaveButton.isClicked(mousePosition))
+    {
+        this->window->close();
+    }
 }
 
 void MainMenuState::render()
 {
-    this->playButton.render(this->window);
+    this->playButton.render(*this->window);
+    this->leaveButton.render(*this->window);
 }
