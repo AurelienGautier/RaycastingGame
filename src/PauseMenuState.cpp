@@ -12,12 +12,12 @@ void PauseMenuState::update()
 {
 	this->window->setMouseCursorVisible(true);
 
-	this->updateButtons();
-
     if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
     {
 		this->changeState(States::GAMESTATE);
     }
+
+	this->updateButtons();
 }
 
 void PauseMenuState::updateButtons()
@@ -28,6 +28,7 @@ void PauseMenuState::updateButtons()
 
 	if(this->resumeButton.isClicked(mousePosition))
 	{
+		this->isEscapePressed = true;
 		this->changeState(States::GAMESTATE);
 	}
 
