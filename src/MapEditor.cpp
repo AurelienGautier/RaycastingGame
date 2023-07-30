@@ -5,3 +5,12 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 {
 }
 
+void MapEditorState::update()
+{
+
+}
+
+void MapEditorState::render()
+{
+    
+}

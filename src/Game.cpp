@@ -29,6 +29,7 @@ void Game::initStates()
     (*this->currentStates)[States::MAINMENUSTATE] = std::make_unique<MainMenuState>(this->window, this->currentStates);
     (*this->currentStates)[States::GAMESTATE] = std::make_unique<GameState>(this->window, this->currentStates);
     (*this->currentStates)[States::PAUSEMENUSTATE] = std::make_unique<PauseMenuState>(this->window, this->currentStates);
+    (*this->currentStates)[States::MAPEDITORSTATE] = std::make_unique<MapEditorState>(this->window, this->currentStates);
 }
 
 /*-------------------------------------------------------------------------------*/

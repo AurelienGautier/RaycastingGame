@@ -7,7 +7,8 @@ enum class States
 {
 	MAINMENUSTATE = 0,
 	GAMESTATE,
-	PAUSEMENUSTATE
+	PAUSEMENUSTATE,
+	MAPEDITORSTATE
 };
 
 class State
