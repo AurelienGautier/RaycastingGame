@@ -15,7 +15,7 @@ private:
 	std::vector<std::vector<Tile>> cells;
 	const int cellSize = 16;
 
-	void getMapFromFile();
+	void getMapFromFile(std::string mapPath);
 	void convertMap(std::vector<std::vector<int>> intMap);
 
 	bool canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove);
@@ -27,7 +27,7 @@ private:
 	bool isWall(Tile cell);
 
 public:
-	Map();
+	Map(std::string mapPath);
 
 	void update(Player& player);
 	void movePlayer(Player& player, Direction direction);

@@ -1,8 +1,8 @@
 #include "header/Map.h"
 
-Map::Map()
+Map::Map(std::string mapPath)
 {
-	this->getMapFromFile();
+	this->getMapFromFile(mapPath);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -97,9 +97,9 @@ bool Map::canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove)
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::getMapFromFile()
+void Map::getMapFromFile(std::string mapPath)
 {
-	std::ifstream mapFile("res/map/level1");
+	std::ifstream mapFile(mapPath);
 
 	char charRead;
 

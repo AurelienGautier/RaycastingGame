@@ -3,6 +3,7 @@
 GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) : 
 	State(gameWindow, states),
 	player(gameWindow->getSize().x),
+	map("res/map/level1"),
 	isEscapePressed(false)
 {
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
