@@ -21,3 +21,6 @@ obj/%.o : src/%.cpp
 
 $(EXEC) : $(OBJ)
 	$(CXX) -o $@ $^ $(SFML_LIBS) $(SFML_LIB)
+
+clean:
+	del /Q obj\*.o
