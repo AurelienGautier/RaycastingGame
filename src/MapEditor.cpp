@@ -13,7 +13,19 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 
 void MapEditorState::update()
 {
+    this->updateKeyboardInputs();
+}
 
+void MapEditorState::updateKeyboardInputs()
+{
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        this->view.move(-10, 0);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        this->view.move(10, 0);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        this->view.move(0, -10);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        this->view.move(0, 10);
 }
 
 void MapEditorState::render()
