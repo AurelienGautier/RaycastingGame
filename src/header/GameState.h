@@ -16,14 +16,15 @@ private:
 	int const cellSize3d = 32;
 	bool isEscapePressed;
 
+	void updateKeyboardInputs();
+	void updateMouseInputs();
+
+	void render3d();
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states);
 
 	void update();
-	void updateKeyboardInputs();
-	void updateMouseInputs();
 
 	void render();
-	void render3d();
 };
 

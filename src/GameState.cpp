@@ -91,43 +91,38 @@ void GameState::render3d()
 
 	float projectionDistance = this->cellSize3d / Glb::tangent(this->player.getVerticalFov() / 2);
 
-	float screenWidth = this->window->getSize().x;
-	float screenHeight = this->window->getSize().y;
+	sf::Vector2f screenSize(this->window->getSize().x, this->window->getSize().y);
 
-	float floorLevel = screenHeight / 2 * (1 + Glb::tangent(this->player.getVerticalRotation()) / Glb::tangent(this->player.getVerticalFov() / 2));
+	float floorLevel = screenSize.y / 2 * (1 + Glb::tangent(this->player.getVerticalRotation()) / Glb::tangent(this->player.getVerticalFov() / 2));
 
-	int previousColumn = INT8_MIN;
-
-	for (int i = 0; i < screenWidth; i++)
+	for (int i = 0; i < screenSize.x; i++)
 	{
 		if (rays[i] < this->player.getMaxRayLength())
 		{
-			float rayAngle = this->player.getHorizontalFov() * (floor(screenWidth) / 2 - i) / (screenWidth - 1);
+			float rayAngle = this->player.getHorizontalFov() * (floor(screenSize.x) / 2 - i) / (screenSize.x - 1);
 			float rayProjectionPosition = Glb::tangent(rayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
 
-			int currentColumn = round(screenWidth * (0.5f - rayProjectionPosition));
-			int nextColumn = screenWidth;
+			int currentColumn = round(screenSize.x * (0.5f - rayProjectionPosition));
+			int nextColumn = screenSize.x;
 
-			if(i < screenWidth - 1)
+			if(i < screenSize.x - 1)
 			{
-				float nextRayAngle = this->player.getHorizontalFov() * (floor(screenWidth) / 2 - 1 - i) / (screenWidth - 1);
+				float nextRayAngle = this->player.getHorizontalFov() * (floor(screenSize.x) / 2 - 1 - i) / (screenSize.x - 1);
 				rayProjectionPosition = Glb::tangent(nextRayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
-				nextColumn = round(screenWidth * (0.5f - rayProjectionPosition));
+				nextColumn = round(screenSize.x * (0.5f - rayProjectionPosition));
 			}
-			if(previousColumn < currentColumn)
-			{
-				float shapeWidth = std::max(1, nextColumn - currentColumn);
-				float shapeHeight = screenHeight * projectionDistance / (rays[i] * Glb::cosine(rayAngle));
 
-				int shapePosX = currentColumn;
-				int shapePosY = floorLevel - shapeHeight / 2;
+			float shapeWidth = std::max(1, nextColumn - currentColumn);
+			float shapeHeight = screenSize.y * projectionDistance / (rays[i] * Glb::cosine(rayAngle));
 
-				sf::RectangleShape shape(sf::Vector2f(shapeWidth, shapeHeight));
-				shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
-				shape.setPosition(shapePosX, shapePosY);
+			int shapePosX = currentColumn;
+			int shapePosY = floorLevel - shapeHeight / 2;
 
-				this->window->draw(shape);
-			}
+			sf::RectangleShape shape(sf::Vector2f(shapeWidth, shapeHeight));
+			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
+			shape.setPosition(shapePosX, shapePosY);
+
+			this->window->draw(shape);
 		}
 	}
 }

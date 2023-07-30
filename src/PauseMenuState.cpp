@@ -36,6 +36,7 @@ void PauseMenuState::updateButtons()
 
 	if(this->goBackToMainMenu.isClicked(mousePosition))
 	{
+		this->isEscapePressed = true;
 		this->changeState(States::MAINMENUSTATE);
 	}
 }
