@@ -296,3 +296,8 @@ bool Map::isWall(Tile cell)
 }
 
 /*-------------------------------------------------------------------------------*/
+
+int Map::getCellsize()
+{
+	return this->cellSize;
+}

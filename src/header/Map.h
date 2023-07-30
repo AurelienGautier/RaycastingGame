@@ -34,5 +34,7 @@ public:
 	void render(sf::RenderWindow& window, sf::View& view);
 
 	void updateFovContact(Player& player);
+
+	int getCellsize();
 };
 

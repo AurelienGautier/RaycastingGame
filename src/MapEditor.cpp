@@ -1,4 +1,5 @@
 #include "header/MapEditorState.h"
+#include <iostream>
 
 MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
     State(gameWindow, states),
@@ -14,6 +15,7 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 void MapEditorState::update()
 {
     this->updateKeyboardInputs();
+    this->updateMouse();
 }
 
 void MapEditorState::updateKeyboardInputs()
@@ -28,7 +30,24 @@ void MapEditorState::updateKeyboardInputs()
         this->view.move(0, 10);
 }
 
+void MapEditorState::updateMouse()
+{
+}
+
 void MapEditorState::render()
 {
     this->map.render(*this->window, this->view);
+
+    sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
+
+    int cellSize = this->map.getCellsize();
+
+    sf::RectangleShape tileSelected(sf::Vector2f(cellSize, cellSize));
+    tileSelected.setFillColor(sf::Color::White);
+    tileSelected.setPosition(
+        floor(mousePosition.x / cellSize) * cellSize , 
+        floor(mousePosition.y / cellSize) * cellSize
+    );
+
+    this->window->draw(tileSelected);
 }
