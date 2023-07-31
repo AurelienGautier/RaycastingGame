@@ -4,12 +4,21 @@ Button::Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize
     textString(text),
     charSize(buttonCharSize)
 {
+    this->initButton(buttonPosition, text, buttonCharSize);
+}
+
+Button::Button()
+{
+    
+}
+
+void Button::initButton(sf::Vector2f buttonPosition, std::string text, int buttonCharSize)
+{
     this->initText(text);
 
-    this->button.top = buttonPosition.y;
-    this->button.left = buttonPosition.x;
-    this->button.width = this->charSize / 2 * text.size();
-    this->button.height = this->charSize * 1.2;
+    this->setPosition(buttonPosition);
+
+    this->setSize(buttonCharSize);
 }
 
 void Button::initText(std::string text)
@@ -70,4 +79,16 @@ bool Button::isClicked(sf::Vector2f mousePosition)
     }
 
     return false;
+}
+
+void Button::setPosition(sf::Vector2f buttonPosition)
+{
+    this->button.top = buttonPosition.y;
+    this->button.left = buttonPosition.x;
+}
+
+void Button::setSize(int buttonCharSize)
+{
+    this->button.width = this->charSize / 2 * this->text.getString().getSize();
+    this->button.height = this->charSize * 1.2;
 }

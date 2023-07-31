@@ -7,9 +7,12 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 {
     sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
 
-    this->view.setCenter(windowCenter);
-	this->view.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y));
-	this->view.setViewport(sf::FloatRect(0, 0, 1, 1));
+    this->interfaceView.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y * 0.16));
+    this->interfaceView.setViewport(sf::FloatRect(0, 0, 1, 0.16));
+
+    this->mapView.setCenter(windowCenter);
+	this->mapView.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y));
+	this->mapView.setViewport(sf::FloatRect(0, 0.16, 1, 0.84));
 }
 
 void MapEditorState::update()
@@ -21,13 +24,13 @@ void MapEditorState::update()
 void MapEditorState::updateKeyboardInputs()
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        this->view.move(0, -10);
+        this->mapView.move(0, -10);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        this->view.move(-10, 0);
+        this->mapView.move(-10, 0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        this->view.move(0, 10);
+        this->mapView.move(0, 10);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        this->view.move(10, 0);
+        this->mapView.move(10, 0);
 }
 
 void MapEditorState::updateMouse()
@@ -54,7 +57,7 @@ void MapEditorState::updateMouse()
 
 void MapEditorState::render()
 {
-    this->map.render(*this->window, this->view);
+    this->map.render(*this->window, this->mapView);
 
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 

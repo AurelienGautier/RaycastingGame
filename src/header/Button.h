@@ -12,10 +12,16 @@ private:
     int charSize;
 
     void initText(std::string Text);
+    void setPosition(sf::Vector2f buttonPosition);
+    void setSize(int buttonCharSize);
+
     bool isCursorOn(sf::Vector2f mousePosition);
 
 public:
+    Button();
     Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize);
+
+    void initButton(sf::Vector2f buttonPosition, std::string text, int buttonCharSize);
 
     void update();
 
