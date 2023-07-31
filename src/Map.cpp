@@ -135,7 +135,7 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 		for (int j = 0; j < intMap[0].size(); j++)
 		{
-			Tile newTile(intMap[i][j], sf::Vector2f(j * this->cellSize, i * this->cellSize));
+			Tile newTile((CellType)intMap[i][j], sf::Vector2f(j * this->cellSize, i * this->cellSize));
 
 			newTile.setGridPosition(sf::Vector2i(i, j));
 
@@ -291,7 +291,7 @@ sf::Vector2f Map::getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaFactor)
 
 bool Map::isWall(Tile cell)
 {
-	if(cell.getNum() != 0) return true;
+	if(cell.getType() != CellType::EMPTY) return true;
 	return false;
 }
 
@@ -304,10 +304,12 @@ int Map::getCellsize()
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::addCell(int cellX, int cellY)
+void Map::changeCell(int cellX, int cellY, CellType cellType)
 {
 	if(cellX < 0 || cellX >= this->cells[0].size()) return;
 	if(cellY < 0 || cellY >= this->cells.size()) return;
 
-	this->cells[cellY][cellX].setNum(1);
+	this->cells[cellY][cellX].setType(cellType);
 }
+
+/*-------------------------------------------------------------------------------*/

@@ -37,6 +37,6 @@ public:
 
 	int getCellsize();
 
-	void addCell(int cellX, int cellY);
+	void changeCell(int cellX, int cellY, CellType cellType);
 };
 

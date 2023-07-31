@@ -1,23 +1,29 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+enum class CellType
+{
+	EMPTY = 0,
+	WALL
+};
+
 class Tile
 {
 private:
-	int num;
+	CellType type;
 	sf::RectangleShape hitbox;
 	sf::Vector2i gridPosition;
 
 	void updateTileType();
 
 public:
-	Tile(int num, sf::Vector2f position);
+	Tile(CellType type, sf::Vector2f position);
 
-	int getNum();
+	CellType getType();
 	sf::RectangleShape getHitbox();
 	sf::Vector2f getPosition();
 
-	void setNum(int num);
+	void setType(CellType type);
 	void setGridPosition(sf::Vector2i gridPosition);
 	sf::Vector2i getGridPosition();
 };

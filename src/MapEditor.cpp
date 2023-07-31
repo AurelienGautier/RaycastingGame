@@ -36,14 +36,19 @@ void MapEditorState::updateMouse()
 
     if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-        this->map.addCell(
+        this->map.changeCell(
             floor(mousePosition.x / this->map.getCellsize()),
-            floor(mousePosition.y / this->map.getCellsize())
+            floor(mousePosition.y / this->map.getCellsize()),
+            CellType::WALL
         );
     }
     if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
     {
-        
+        this->map.changeCell(
+            floor(mousePosition.x / this->map.getCellsize()),
+            floor(mousePosition.y / this->map.getCellsize()),
+            CellType::EMPTY
+        );
     }
 }
 

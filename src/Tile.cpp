@@ -1,8 +1,8 @@
 #include "header/Tile.h"
 
-Tile::Tile(int num, sf::Vector2f position)
+Tile::Tile(CellType type, sf::Vector2f position)
 {
-    this->num = num;
+    this->type = type;
     this->hitbox.setSize(sf::Vector2f(16, 16));
     this->hitbox.setPosition(position);
 
@@ -11,15 +11,15 @@ Tile::Tile(int num, sf::Vector2f position)
 
 void Tile::updateTileType()
 {
-    if (this->num == 1)
+    if (this->type == CellType::WALL)
         this->hitbox.setFillColor(sf::Color::Red);
-    else
+    else if (this->type == CellType::EMPTY)
         this->hitbox.setFillColor(sf::Color::Black);
 }
 
-int Tile::getNum()
+CellType Tile::getType()
 {
-    return this->num;
+    return this->type;
 }
 
 sf::RectangleShape Tile::getHitbox()
@@ -32,9 +32,9 @@ sf::Vector2f Tile::getPosition()
     return this->hitbox.getPosition();
 }
 
-void Tile::setNum(int num)
+void Tile::setType(CellType type)
 {
-    this->num = num;
+    this->type = type;
 
     this->updateTileType();
 }
