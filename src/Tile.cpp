@@ -6,6 +6,11 @@ Tile::Tile(int num, sf::Vector2f position)
     this->hitbox.setSize(sf::Vector2f(16, 16));
     this->hitbox.setPosition(position);
 
+    this->updateTileType();
+}
+
+void Tile::updateTileType()
+{
     if (this->num == 1)
         this->hitbox.setFillColor(sf::Color::Red);
     else
@@ -25,6 +30,13 @@ sf::RectangleShape Tile::getHitbox()
 sf::Vector2f Tile::getPosition()
 {
     return this->hitbox.getPosition();
+}
+
+void Tile::setNum(int num)
+{
+    this->num = num;
+
+    this->updateTileType();
 }
 
 void Tile::setGridPosition(sf::Vector2i gridPosition)

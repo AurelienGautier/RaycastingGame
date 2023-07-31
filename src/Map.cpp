@@ -301,3 +301,13 @@ int Map::getCellsize()
 {
 	return this->cellSize;
 }
+
+/*-------------------------------------------------------------------------------*/
+
+void Map::addCell(int cellX, int cellY)
+{
+	if(cellX < 0 || cellX >= this->cells[0].size()) return;
+	if(cellY < 0 || cellY >= this->cells.size()) return;
+
+	this->cells[cellY][cellX].setNum(1);
+}

@@ -20,18 +20,31 @@ void MapEditorState::update()
 
 void MapEditorState::updateKeyboardInputs()
 {
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        this->view.move(-10, 0);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        this->view.move(10, 0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         this->view.move(0, -10);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        this->view.move(-10, 0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         this->view.move(0, 10);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        this->view.move(10, 0);
 }
 
 void MapEditorState::updateMouse()
 {
+    sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        this->map.addCell(
+            floor(mousePosition.x / this->map.getCellsize()),
+            floor(mousePosition.y / this->map.getCellsize())
+        );
+    }
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    {
+        
+    }
 }
 
 void MapEditorState::render()

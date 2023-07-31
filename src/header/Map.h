@@ -36,5 +36,7 @@ public:
 	void updateFovContact(Player& player);
 
 	int getCellsize();
+
+	void addCell(int cellX, int cellY);
 };
 
