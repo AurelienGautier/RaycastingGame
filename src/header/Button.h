@@ -6,14 +6,13 @@ class Button
 {
 private:
     sf::FloatRect button;
-    std::string textString;
     sf::Text text;
     sf::Font font;
     int charSize;
 
     void initText(std::string Text);
     void setPosition(sf::Vector2f buttonPosition);
-    void setSize(int buttonCharSize);
+    void setSize();
 
     bool isCursorOn(sf::Vector2f mousePosition);
 

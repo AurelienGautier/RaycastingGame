@@ -11,11 +11,15 @@ private:
     sf::View interfaceView;
     sf::View mapView;
 
-    // Button saveButton;
-    // Button exitButton;
+    Button exitButton;
 
     void updateKeyboardInputs();
     void updateMouse();
+
+    void initInterface();
+    void updateInterface();
+
+    void renderInterface();
 
 public:
     MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states);

@@ -1,24 +1,24 @@
 #include "header/Button.h"
 
-Button::Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize) :
-    textString(text),
-    charSize(buttonCharSize)
+Button::Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize)
 {
     this->initButton(buttonPosition, text, buttonCharSize);
 }
 
 Button::Button()
 {
-    
+    this->initButton(sf::Vector2f(0, 0), "Button", 32);
 }
 
 void Button::initButton(sf::Vector2f buttonPosition, std::string text, int buttonCharSize)
 {
+    this->charSize = buttonCharSize;
+
     this->initText(text);
 
     this->setPosition(buttonPosition);
 
-    this->setSize(buttonCharSize);
+    this->setSize();
 }
 
 void Button::initText(std::string text)
@@ -87,7 +87,7 @@ void Button::setPosition(sf::Vector2f buttonPosition)
     this->button.left = buttonPosition.x;
 }
 
-void Button::setSize(int buttonCharSize)
+void Button::setSize()
 {
     this->button.width = this->charSize / 2 * this->text.getString().getSize();
     this->button.height = this->charSize * 1.2;
