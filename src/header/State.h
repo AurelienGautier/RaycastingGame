@@ -17,6 +17,10 @@ protected:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<std::map<States, std::unique_ptr<State>>> currentStates;
 
+	sf::View defaultView;
+	bool defaultViewSet = false;
+	void setDefaultView();
+
 	bool isKeyPressed(bool& keyPressed, bool sfKeyPressed);
 public:
 	State(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states);

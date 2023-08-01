@@ -49,7 +49,6 @@ void GameState::updateKeyboardInputs()
 	// pause
 	if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
 	{
-		this->window->setView(window->getDefaultView());
 		this->changeState(States::PAUSEMENUSTATE);
 	}
 }

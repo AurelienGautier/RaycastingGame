@@ -92,3 +92,8 @@ void Button::setSize()
     this->button.width = this->charSize / 2 * this->text.getString().getSize();
     this->button.height = this->charSize * 1.2;
 }
+
+sf::Vector2f Button::getPosition()
+{
+    return sf::Vector2f(this->button.left, this->button.top);
+}

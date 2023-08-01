@@ -17,6 +17,7 @@ private:
     void updateMouse();
 
     void initInterface();
+    void updateButtons();
     void updateInterface();
 
     void renderInterface();

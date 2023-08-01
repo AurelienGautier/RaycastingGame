@@ -27,4 +27,6 @@ public:
     void render(sf::RenderWindow& window);
 
     bool isClicked(sf::Vector2f mousePosition);
+
+    sf::Vector2f getPosition();
 };

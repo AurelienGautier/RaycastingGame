@@ -6,9 +6,11 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 {
     this->initInterface();
 
-    sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
+    this->mapView.setCenter(
+        this->window->getSize().x / 2,
+        this->window->getSize().y * 0.84 / 2
+    );
 
-    this->mapView.setCenter(windowCenter);
 	this->mapView.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y * 0.84));
 	this->mapView.setViewport(sf::FloatRect(0, 0.16, 1, 0.84));
 }
@@ -28,18 +30,28 @@ void MapEditorState::initInterface()
 
 void MapEditorState::update()
 {
-    this->updateInterface();
     this->updateKeyboardInputs();
     this->updateMouse();
+    this->updateInterface();
 }
 
 void MapEditorState::updateInterface()
 {
     this->window->setView(this->interfaceView);
 
+    this->updateButtons();
+}
+
+void MapEditorState::updateButtons()
+{
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 
     this->exitButton.update();
+
+    if(this->exitButton.isClicked(mousePosition))
+    {
+        this->changeState(States::MAINMENUSTATE);
+    }
 }
 
 void MapEditorState::updateKeyboardInputs()
