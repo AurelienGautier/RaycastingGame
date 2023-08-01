@@ -26,6 +26,7 @@ void MapEditorState::initInterface()
     this->interfaceView.setViewport(sf::FloatRect(0, 0, 1, 0.16));
 
     this->exitButton.initButton(sf::Vector2f(0, 0), "Exit", 32);
+    this->saveButton.initButton(sf::Vector2f(0, 40), "Save", 32);
 }
 
 void MapEditorState::update()
@@ -51,6 +52,13 @@ void MapEditorState::updateButtons()
     if(this->exitButton.isClicked(mousePosition))
     {
         this->changeState(States::MAINMENUSTATE);
+    }
+
+    this->saveButton.update();
+
+    if(this->saveButton.isClicked(mousePosition))
+    {
+        this->map.save();
     }
 }
 
@@ -116,4 +124,6 @@ void MapEditorState::renderInterface()
     this->window->setView(this->interfaceView);
 
     this->exitButton.render(*this->window);
+
+    this->saveButton.render(*this->window);
 }

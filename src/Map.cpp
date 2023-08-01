@@ -1,8 +1,8 @@
 #include "header/Map.h"
 
-Map::Map(std::string mapPath)
+Map::Map(std::string mapPath) : path(mapPath)
 {
-	this->getMapFromFile(mapPath);
+	this->getMapFromFile();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -97,9 +97,9 @@ bool Map::canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove)
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::getMapFromFile(std::string mapPath)
+void Map::getMapFromFile()
 {
-	std::ifstream mapFile(mapPath);
+	std::ifstream mapFile(this->path);
 
 	char charRead;
 
@@ -310,6 +310,23 @@ void Map::changeCell(int cellX, int cellY, CellType cellType)
 	if(cellY < 0 || cellY >= this->cells.size()) return;
 
 	this->cells[cellY][cellX].setType(cellType);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Map::save()
+{
+	std::ofstream mapFile(this->path);
+
+	for(int i = 0; i < this->cells.size(); i++)
+	{
+		for(int j = 0; j < this->cells[0].size(); j++)
+		{
+			mapFile << (int)this->cells[i][j].getType();
+		}
+
+		mapFile << std::endl;
+	}
 }
 
 /*-------------------------------------------------------------------------------*/

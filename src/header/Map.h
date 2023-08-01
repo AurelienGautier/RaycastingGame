@@ -14,8 +14,9 @@ class Map
 private:
 	std::vector<std::vector<Tile>> cells;
 	const int cellSize = 16;
+	std::string path;
 
-	void getMapFromFile(std::string mapPath);
+	void getMapFromFile();
 	void convertMap(std::vector<std::vector<int>> intMap);
 
 	bool canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove);
@@ -38,5 +39,7 @@ public:
 	int getCellsize();
 
 	void changeCell(int cellX, int cellY, CellType cellType);
+
+	void save();
 };
 

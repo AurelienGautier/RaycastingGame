@@ -12,6 +12,7 @@ private:
     sf::View mapView;
 
     Button exitButton;
+    Button saveButton;
 
     void updateKeyboardInputs();
     void updateMouse();

@@ -10,7 +10,6 @@ MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::
 
 void MainMenuState::update()
 {
-
     this->window->setMouseCursorVisible(true);
 
     this->updateButtons();
