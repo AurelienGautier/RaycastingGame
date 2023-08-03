@@ -23,7 +23,7 @@ void MainMenuState::updateButtons()
     
     if(this->playButton.isClicked(mousePosition))
     {
-        this->changeState(States::GAMESTATE);
+        this->changeState(States::MAPCHOOSESTATE);
     }
 
     this->mapEditorButton.update();

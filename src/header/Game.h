@@ -10,6 +10,7 @@
 #include "MainMenuState.h"
 #include "PauseMenuState.h"
 #include "MapEditorState.h"
+#include "MapChooseState.h"
 
 class Game
 {

@@ -1,4 +1,8 @@
 #include "header/Button.h"
+#include <iostream>
+
+bool Button::isFontCreated = false;
+sf::Font Button::font;
 
 Button::Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize)
 {
@@ -23,10 +27,15 @@ void Button::initButton(sf::Vector2f buttonPosition, std::string text, int butto
 
 void Button::initText(std::string text)
 {
-    this->font.loadFromFile("res/font/BMgermar.TTF");
+    if(!Button::isFontCreated)
+    {
+        Button::font.loadFromFile("res/font/BMgermar.TTF");
+
+        Button::isFontCreated = true;
+    }
 
     this->text.setString(text);
-    this->text.setFont(this->font);
+    this->text.setFont(Button::font);
     this->text.setCharacterSize(this->charSize);
 }
 

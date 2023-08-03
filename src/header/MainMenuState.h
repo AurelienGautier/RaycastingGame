@@ -2,6 +2,7 @@
 
 #include "State.h"
 #include "Button.h"
+#include <array>
 
 class MainMenuState : public State
 {

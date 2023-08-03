@@ -7,7 +7,6 @@ class Button
 private:
     sf::FloatRect button;
     sf::Text text;
-    sf::Font font;
     int charSize;
 
     void initText(std::string Text);
@@ -15,6 +14,9 @@ private:
     void setSize();
 
     bool isCursorOn(sf::Vector2f mousePosition);
+
+    static bool isFontCreated;
+    static sf::Font font;
 
 public:
     Button();
