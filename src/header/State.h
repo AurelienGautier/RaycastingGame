@@ -6,14 +6,16 @@
 
 class State
 {
+private:
+	// For the default view
+	static sf::View defaultView;
+	static bool defaultViewSet;
+	void initDefaultView();
+	void setDefaultView();
+
 protected:
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<std::stack<std::unique_ptr<State>>> currentStates;
-
-	// For the default view
-	sf::View defaultView;
-	bool defaultViewSet = false;
-	void setDefaultView();
 
 	bool isKeyPressed(bool& keyPressed, bool sfKeyPressed);
 public:
