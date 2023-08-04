@@ -23,7 +23,7 @@ void MainMenuState::updateButtons()
     
     if(this->playButton.isClicked(mousePosition))
     {
-        (*this->currentStates).push(std::make_unique<GameState>(this->window, this->currentStates));
+        (*this->currentStates).push(std::make_unique<MapChooseState>(this->window, this->currentStates));
     }
 
     this->mapEditorButton.update();

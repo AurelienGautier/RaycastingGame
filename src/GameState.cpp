@@ -1,9 +1,9 @@
 #include "header/GameState.h"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) : 
+GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName) : 
 	State(gameWindow, states),
 	player(gameWindow->getSize().x),
-	map("res/map/level1"),
+	map("res/map/" + mapName),
 	isEscapePressed(false)
 {
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);

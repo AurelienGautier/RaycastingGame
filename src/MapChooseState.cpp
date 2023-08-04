@@ -28,9 +28,20 @@ void MapChooseState::getMapList()
 
 void MapChooseState::update()
 {
+    sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
+
     for(int i = 0; i < this->mapButtonList.size(); i++)
     {
         this->mapButtonList[i].update();
+
+        if(this->mapButtonList[i].isClicked(mousePosition))
+        {
+            this->currentStates->push(std::make_unique<GameState>(
+                this->window, 
+                this->currentStates, 
+                this->mapButtonList[i].getText())
+            );
+        }
     }
 }
 

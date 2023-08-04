@@ -31,4 +31,6 @@ public:
     bool isClicked(sf::Vector2f mousePosition);
 
     sf::Vector2f getPosition();
+
+    std::string getText();
 };

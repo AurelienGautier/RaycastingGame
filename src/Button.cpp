@@ -106,3 +106,8 @@ sf::Vector2f Button::getPosition()
 {
     return sf::Vector2f(this->button.left, this->button.top);
 }
+
+std::string Button::getText()
+{
+    return this->text.getString();
+}
