@@ -1,8 +1,8 @@
 #include "header/MapEditorState.h"
 
-MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) :
+MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName) :
     State(gameWindow, states),
-    map("res/map/level1")
+    map("res/map/" + mapName)
 {
     this->initInterface();
 

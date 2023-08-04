@@ -23,14 +23,14 @@ void MainMenuState::updateButtons()
     
     if(this->playButton.isClicked(mousePosition))
     {
-        (*this->currentStates).push(std::make_unique<MapChooseState>(this->window, this->currentStates));
+        this->currentStates->push(std::make_unique<MapChooseState>(this->window, this->currentStates, MapChooseReason::PLAY));
     }
 
     this->mapEditorButton.update();
 
     if(this->mapEditorButton.isClicked(mousePosition))
     {
-        (*this->currentStates).push(std::make_unique<MapEditorState>(this->window, this->currentStates));
+        this->currentStates->push(std::make_unique<MapChooseState>(this->window, this->currentStates, MapChooseReason::EDIT));
     }
 
     this->leaveButton.update();

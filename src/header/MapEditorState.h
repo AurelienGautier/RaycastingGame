@@ -24,7 +24,7 @@ private:
     void renderInterface();
 
 public:
-    MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
+    MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName);
 
     void update();
 
