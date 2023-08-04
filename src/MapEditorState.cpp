@@ -52,6 +52,7 @@ void MapEditorState::updateButtons()
     if(this->exitButton.isClicked(mousePosition))
     {
         this->deleteState();
+        this->currentStates->pop();
     }
 
     this->saveButton.update();

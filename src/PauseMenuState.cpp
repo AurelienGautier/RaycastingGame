@@ -37,6 +37,7 @@ void PauseMenuState::updateButtons()
 	{
 		this->currentStates->pop();
 		this->currentStates->pop();
+		this->currentStates->pop();
 	}
 }
 
