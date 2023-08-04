@@ -1,7 +1,7 @@
 #include "header/MapChooseState.h"
 #include <iostream>
 
-MapChooseState::MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
+MapChooseState::MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) :
     State(gameWindow, states)
 {
     this->getMapList();

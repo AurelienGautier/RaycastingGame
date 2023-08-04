@@ -24,13 +24,9 @@ void Game::initWindow()
 
 void Game::initStates()
 {
-    this->currentStates = std::make_shared<std::map<States, std::unique_ptr<State>>>();
+    this->currentStates = std::make_shared<std::stack<std::unique_ptr<State>>>();
 
-    (*this->currentStates)[States::MAINMENUSTATE] = std::make_unique<MainMenuState>(this->window, this->currentStates);
-    (*this->currentStates)[States::GAMESTATE] = std::make_unique<GameState>(this->window, this->currentStates);
-    (*this->currentStates)[States::PAUSEMENUSTATE] = std::make_unique<PauseMenuState>(this->window, this->currentStates);
-    (*this->currentStates)[States::MAPEDITORSTATE] = std::make_unique<MapEditorState>(this->window, this->currentStates);
-    (*this->currentStates)[States::MAPCHOOSESTATE] = std::make_unique<MapChooseState>(this->window, this->currentStates);
+    this->currentStates->push(std::make_unique<MainMenuState>(this->window, this->currentStates));
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -50,7 +46,7 @@ void Game::update()
 {
     this->updateEvents();
 
-    (*this->currentStates)[State::currentState]->update();
+    (*this->currentStates).top()->update();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -70,7 +66,7 @@ void Game::render()
 {
     this->window->clear();
 
-    (*this->currentStates)[State::currentState]->render();
+    (*this->currentStates).top()->render();
 
     this->window->display();
 }

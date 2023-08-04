@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <array>
 #include <string>
 #include <memory>
 
@@ -17,7 +16,7 @@ class Game
 private:
 	std::shared_ptr<sf::RenderWindow> window;
 	sf::Event event;
-	std::shared_ptr<std::map<States, std::unique_ptr<State>>> currentStates;
+	std::shared_ptr<std::stack<std::unique_ptr<State>>> currentStates;
 
 public:
 	Game();

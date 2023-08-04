@@ -13,7 +13,7 @@ private:
     void getMapList();
 
 public:
-    MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states);
+    MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
     void update();
     void render();
 };

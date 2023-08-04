@@ -1,6 +1,6 @@
 #include "header/GameState.h"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) : 
+GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) : 
 	State(gameWindow, states),
 	player(gameWindow->getSize().x),
 	map("res/map/level1"),
@@ -49,7 +49,7 @@ void GameState::updateKeyboardInputs()
 	// pause
 	if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
 	{
-		this->changeState(States::PAUSEMENUSTATE);
+		(*this->currentStates).push(std::make_unique<PauseMenuState>(this->window, this->currentStates));
 	}
 }
 

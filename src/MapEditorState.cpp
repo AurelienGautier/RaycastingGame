@@ -1,6 +1,6 @@
 #include "header/MapEditorState.h"
 
-MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
+MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) :
     State(gameWindow, states),
     map("res/map/level1")
 {
@@ -51,7 +51,7 @@ void MapEditorState::updateButtons()
 
     if(this->exitButton.isClicked(mousePosition))
     {
-        this->changeState(States::MAINMENUSTATE);
+        this->deleteState();
     }
 
     this->saveButton.update();

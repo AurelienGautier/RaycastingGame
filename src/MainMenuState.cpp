@@ -1,6 +1,6 @@
 #include "header/MainMenuState.h"
 
-MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
+MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) :
     State(gameWindow, states),
     playButton(sf::Vector2f(200, 200), "Play", 32),
     mapEditorButton(sf::Vector2f(200, 300), "MapEditor", 32),
@@ -23,14 +23,14 @@ void MainMenuState::updateButtons()
     
     if(this->playButton.isClicked(mousePosition))
     {
-        this->changeState(States::MAPCHOOSESTATE);
+        (*this->currentStates).push(std::make_unique<GameState>(this->window, this->currentStates));
     }
 
     this->mapEditorButton.update();
 
     if(this->mapEditorButton.isClicked(mousePosition))
     {
-        this->changeState(States::MAPEDITORSTATE);
+        (*this->currentStates).push(std::make_unique<MapEditorState>(this->window, this->currentStates));
     }
 
     this->leaveButton.update();

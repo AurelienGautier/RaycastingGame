@@ -1,6 +1,6 @@
 #include "header/PauseMenuState.h"
 
-PauseMenuState::PauseMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::map<States, std::unique_ptr<State>>> states) :
+PauseMenuState::PauseMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) :
     State(gameWindow, states),
     isEscapePressed(true),
 	resumeButton(sf::Vector2f(200, 200), "Resume", 32),
@@ -12,12 +12,12 @@ void PauseMenuState::update()
 {
 	this->window->setMouseCursorVisible(true);
 
+	this->updateButtons();
+
     if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
     {
-		this->changeState(States::GAMESTATE);
+		this->deleteState();
     }
-
-	this->updateButtons();
 }
 
 void PauseMenuState::updateButtons()
@@ -28,16 +28,15 @@ void PauseMenuState::updateButtons()
 
 	if(this->resumeButton.isClicked(mousePosition))
 	{
-		this->isEscapePressed = true;
-		this->changeState(States::GAMESTATE);
+		this->deleteState();
 	}
 
 	this->goBackToMainMenu.update();
 
 	if(this->goBackToMainMenu.isClicked(mousePosition))
 	{
-		this->isEscapePressed = true;
-		this->changeState(States::MAINMENUSTATE);
+		this->currentStates->pop();
+		this->currentStates->pop();
 	}
 }
 
