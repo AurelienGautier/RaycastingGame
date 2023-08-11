@@ -20,7 +20,6 @@ private:
     static sf::Font font;
 
 public:
-    Button();
     Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize);
 
     void update();

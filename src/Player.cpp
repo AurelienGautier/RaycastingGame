@@ -4,7 +4,7 @@ Player::Player(float windowWidth) :
 	radius(8), 
 	maxRayLength(400),
 	horizontalFov(90.f),
-	verticalFov(60.f),
+	verticalFov(90.f),
 	verticalRotation(0) 
 {
 	this->initHitbox();

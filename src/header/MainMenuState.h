@@ -5,6 +5,8 @@
 #include "MapEditorState.h"
 #include "Button.h"
 
+#include "NumberInput.h"
+
 class MainMenuState : public State
 {
 private:

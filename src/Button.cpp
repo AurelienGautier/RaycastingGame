@@ -9,11 +9,6 @@ Button::Button(sf::Vector2f buttonPosition, std::string text, int buttonCharSize
     this->initButton(buttonPosition, text, buttonCharSize);
 }
 
-Button::Button()
-{
-    this->initButton(sf::Vector2f(0, 0), "Button", 32);
-}
-
 void Button::initButton(sf::Vector2f buttonPosition, std::string text, int buttonCharSize)
 {
     this->charSize = buttonCharSize;

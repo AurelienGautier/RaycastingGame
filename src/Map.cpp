@@ -306,7 +306,7 @@ int Map::getCellsize()
 
 void Map::changeCell(int cellX, int cellY, CellType cellType)
 {
-	if(cellX < 0 || cellX >= this->cells[0].size()) return;
+	if(cellX < 0 || cellX > this->cells[0].size()) return;
 	if(cellY < 0 || cellY >= this->cells.size()) return;
 
 	this->cells[cellY][cellX].setType(cellType);
