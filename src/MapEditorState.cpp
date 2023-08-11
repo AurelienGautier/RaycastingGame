@@ -15,6 +15,8 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 	this->mapView.setViewport(sf::FloatRect(0, 0.16, 1, 0.84));
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void MapEditorState::initInterface()
 {
     this->interfaceView.setCenter(sf::Vector2f(
@@ -25,9 +27,11 @@ void MapEditorState::initInterface()
     this->interfaceView.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y * 0.16));
     this->interfaceView.setViewport(sf::FloatRect(0, 0, 1, 0.16));
 
-    this->exitButton.initButton(sf::Vector2f(0, 0), "Exit", 32);
-    this->saveButton.initButton(sf::Vector2f(0, 40), "Save", 32);
+    this->exitButton = new Button(sf::Vector2f(0, 0), "Exit", 32);
+    this->saveButton = new Button(sf::Vector2f(0, 40), "Save", 32);
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void MapEditorState::update()
 {
@@ -36,32 +40,40 @@ void MapEditorState::update()
     this->updateInterface();
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void MapEditorState::updateInterface()
 {
     this->window->setView(this->interfaceView);
 
+    sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
+
     this->updateButtons();
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void MapEditorState::updateButtons()
 {
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 
-    this->exitButton.update();
+    this->exitButton->update();
 
-    if(this->exitButton.isClicked(mousePosition))
+    if(this->exitButton->isClicked(mousePosition))
     {
         this->deleteState();
         this->currentStates->pop();
     }
 
-    this->saveButton.update();
+    this->saveButton->update();
 
-    if(this->saveButton.isClicked(mousePosition))
+    if(this->saveButton->isClicked(mousePosition))
     {
         this->map.save();
     }
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void MapEditorState::updateKeyboardInputs()
 {
@@ -74,6 +86,8 @@ void MapEditorState::updateKeyboardInputs()
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         this->mapView.move(10, 0);
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void MapEditorState::updateMouse()
 {
@@ -98,6 +112,8 @@ void MapEditorState::updateMouse()
     }
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void MapEditorState::render()
 {
     this->renderInterface();
@@ -120,11 +136,16 @@ void MapEditorState::render()
     this->window->draw(tileSelected);
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void MapEditorState::renderInterface()
 {
     this->window->setView(this->interfaceView);
 
-    this->exitButton.render(*this->window);
+    this->exitButton->render(*this->window);
 
-    this->saveButton.render(*this->window);
+    this->saveButton->render(*this->window);
 }
+
+/*-------------------------------------------------------------------------------*/
+

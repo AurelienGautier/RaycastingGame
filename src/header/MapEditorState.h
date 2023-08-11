@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Map.h"
 #include "Button.h"
+#include "NumberInput.h"
 
 class MapEditorState : public State
 {
@@ -11,8 +12,10 @@ private:
     sf::View interfaceView;
     sf::View mapView;
 
-    Button exitButton;
-    Button saveButton;
+    Button* exitButton;
+    Button* saveButton;
+
+    // NumberInput widthInput;
 
     void updateKeyboardInputs();
     void updateMouse();
