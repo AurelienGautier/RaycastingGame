@@ -30,22 +30,20 @@ void Player::initRays(float windowWidth)
 {
 	for (float i = 0; i <= windowWidth; i++)
 	{
-		this->rays.push_back(this->maxRayLength);
-		this->raysHitPoints.push_back(sf::Vector2f(0, 0));
+		Ray newRay;
+		newRay.length = this->maxRayLength;
+		newRay.hitPoint = sf::Vector2f(0, 0);
+
+		this->rays.push_back(newRay);
 	}
 }
 
 /*-------------------------------------------------------------------------------*/
 // Getters
 
-std::vector<float> Player::getRays()
+std::vector<Ray> Player::getRays()
 {
 	return this->rays;
-}
-
-std::vector<sf::Vector2f> Player::getRaysHitPoints()
-{
-	return this->raysHitPoints;
 }
 
 sf::Vector2f Player::getPosition()
@@ -97,10 +95,11 @@ void Player::setPosition(float x, float y)
 	this->hitbox.setPosition(x, y);
 }
 
-void Player::setRaySize(int index, float raySize, sf::Vector2f hitPoint)
+void Player::updateRay(int index, float raySize, sf::Vector2f hitPoint, HitType hitType)
 {
-	this->rays[index] = raySize;
-	this->raysHitPoints[index] = hitPoint;
+	this->rays[index].length = raySize;
+	this->rays[index].hitPoint = hitPoint;
+	this->rays[index].hitType = hitType;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -110,7 +109,7 @@ void Player::update()
 {
 	for (int i = 0; i < this->rays.size(); i++)
 	{
-		this->rays[i] = this->maxRayLength;
+		this->rays[i].length = this->maxRayLength;
 	}
 }
 
@@ -130,8 +129,8 @@ void Player::render(sf::RenderWindow& window, sf::View& view)
 		float angle = this->calculateRayAngle(i);
 
 		fovVisualization[1 + i].position = sf::Vector2f(
-			this->getPosition().x + rays[i] * Glb::cosine(angle),
-			this->getPosition().y + rays[i] * Glb::sinus(angle));
+			this->getPosition().x + rays[i].length * Glb::cosine(angle),
+			this->getPosition().y + rays[i].length * Glb::sinus(angle));
 	}
 
 	window.draw(fovVisualization);

@@ -85,8 +85,7 @@ void GameState::render3d()
 {
 	this->window->setView(this->gameplayView);
 
-	std::vector<float> rays = this->player.getRays();
-	std::vector<sf::Vector2f> raysHitPoints = this->player.getRaysHitPoints();
+	std::vector<Ray> rays = this->player.getRays();
 
 	float projectionDistance = this->cellSize3d / Glb::tangent(this->player.getVerticalFov() / 2);
 
@@ -96,7 +95,7 @@ void GameState::render3d()
 
 	for (int i = 0; i < screenSize.x; i++)
 	{
-		if (rays[i] < this->player.getMaxRayLength())
+		if (rays[i].length < this->player.getMaxRayLength())
 		{
 			float rayAngle = this->player.getHorizontalFov() * (floor(screenSize.x) / 2 - i) / (screenSize.x - 1);
 			float rayProjectionPosition = Glb::tangent(rayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
@@ -112,13 +111,13 @@ void GameState::render3d()
 			}
 
 			float shapeWidth = std::max(1, nextColumn - currentColumn);
-			float shapeHeight = screenSize.y * projectionDistance / (rays[i] * Glb::cosine(rayAngle));
+			float shapeHeight = screenSize.y * projectionDistance / (rays[i].length * Glb::cosine(rayAngle));
 
 			int shapePosX = currentColumn;
 			int shapePosY = floorLevel - shapeHeight / 2;
 
 			sf::RectangleShape shape(sf::Vector2f(shapeWidth, shapeHeight));
-			shape.setFillColor(sf::Color(255 * (1 - rays[i] / 1024), 0, 0));
+			shape.setFillColor(sf::Color(255 * (1 - rays[i].length / 1024), 0, 0));
 			shape.setPosition(shapePosX, shapePosY);
 
 			this->window->draw(shape);

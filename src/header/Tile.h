@@ -26,6 +26,7 @@ public:
 	CellType getType();
 	sf::RectangleShape getHitbox();
 	sf::Vector2f getPosition();
+	std::vector<sf::Texture> getTextures();
 
 	void setType(CellType type);
 	void setGridPosition(sf::Vector2i gridPosition);

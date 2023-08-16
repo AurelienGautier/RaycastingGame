@@ -148,7 +148,7 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 void Map::updateFovContact(Player& player)
 {
-	std::vector<float> rays = player.getRays();
+	std::vector<Ray> rays = player.getRays();
 
 	for (int i = 0; i < rays.size(); i++)
 	{
@@ -171,6 +171,8 @@ void Map::defineRay(Player &player, int ray)
 	float angle = player.calculateRayAngle(ray);
 
 	float slope = Glb::tangent(angle);
+
+	HitType hitType;
 
 	while (rayLength < maxRaySize && !wallMet)
 	{
@@ -198,6 +200,8 @@ void Map::defineRay(Player &player, int ray)
 
 			rayLength += delta.y / Glb::sinus(angle);
 			nextCell.y += deltaFactor.y;
+
+			hitType = HitType::VERTICAL; 
 		}
 		else // If the next cell is horizontal
 		{
@@ -206,12 +210,14 @@ void Map::defineRay(Player &player, int ray)
 
 			rayLength += delta.x / Glb::cosine(angle);
 			nextCell.x += deltaFactor.x;
+
+			hitType = HitType::HORIZONTAL;
 		}
 		
 		if (rayLength <= maxRaySize && this->isWall(this->cells[nextCell.y][nextCell.x]))
 		{
 			wallMet = true;
-			player.setRaySize(ray, rayLength, startPoint);
+			player.updateRay(ray, rayLength, startPoint, hitType);
 		}
 	}
 }

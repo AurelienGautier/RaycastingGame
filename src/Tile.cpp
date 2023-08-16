@@ -45,6 +45,11 @@ sf::Vector2f Tile::getPosition()
     return this->hitbox.getPosition();
 }
 
+std::vector<sf::Texture> Tile::getTextures()
+{
+    return this->wallTextures;
+}
+
 void Tile::setType(CellType type)
 {
     this->type = type;
