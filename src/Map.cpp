@@ -152,13 +152,13 @@ void Map::updateFovContact(Player& player)
 
 	for (int i = 0; i < rays.size(); i++)
 	{
-		player.setRaySize(i, this->getRaySize(player, i));
+		this->defineRay(player, i);
 	}
 }
 
 /*-------------------------------------------------------------------------------*/
 
-float Map::getRaySize(Player &player, int ray)
+void Map::defineRay(Player &player, int ray)
 {
 	float rayLength = 0;
 
@@ -211,12 +211,9 @@ float Map::getRaySize(Player &player, int ray)
 		if (rayLength <= maxRaySize && this->isWall(this->cells[nextCell.y][nextCell.x]))
 		{
 			wallMet = true;
+			player.setRaySize(ray, rayLength, startPoint);
 		}
 	}
-
-	if (!wallMet) rayLength = maxRaySize;
-
-	return rayLength;
 }
 
 /*-------------------------------------------------------------------------------*/

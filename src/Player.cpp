@@ -31,6 +31,7 @@ void Player::initRays(float windowWidth)
 	for (float i = 0; i <= windowWidth; i++)
 	{
 		this->rays.push_back(this->maxRayLength);
+		this->raysHitPoints.push_back(sf::Vector2f(0, 0));
 	}
 }
 
@@ -42,6 +43,10 @@ std::vector<float> Player::getRays()
 	return this->rays;
 }
 
+std::vector<sf::Vector2f> Player::getRaysHitPoints()
+{
+	return this->raysHitPoints;
+}
 
 sf::Vector2f Player::getPosition()
 {
@@ -86,14 +91,16 @@ float Player::getVerticalFov()
 
 /*-------------------------------------------------------------------------------*/
 // Setters
+
 void Player::setPosition(float x, float y)
 {
 	this->hitbox.setPosition(x, y);
 }
 
-void Player::setRaySize(int index, float raySize)
+void Player::setRaySize(int index, float raySize, sf::Vector2f hitPoint)
 {
 	this->rays[index] = raySize;
+	this->raysHitPoints[index] = hitPoint;
 }
 
 /*-------------------------------------------------------------------------------*/

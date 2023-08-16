@@ -21,7 +21,7 @@ private:
 
 	bool canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove);
 
-	float getRaySize(Player& player, int ray);
+	void defineRay(Player& player, int ray);
 	sf::Vector2i getDeltaFactor(float angle);
 	sf::Vector2f getDelta(sf::Vector2f cellPos, sf::Vector2i deltaFactor, sf::Vector2f startPoint);
 	sf::Vector2f getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaFactor);

@@ -86,6 +86,7 @@ void GameState::render3d()
 	this->window->setView(this->gameplayView);
 
 	std::vector<float> rays = this->player.getRays();
+	std::vector<sf::Vector2f> raysHitPoints = this->player.getRaysHitPoints();
 
 	float projectionDistance = this->cellSize3d / Glb::tangent(this->player.getVerticalFov() / 2);
 

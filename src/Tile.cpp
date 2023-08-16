@@ -1,12 +1,25 @@
 #include "header/Tile.h"
 
+bool Tile::texturesInitialized = false;
+std::vector<sf::Texture> Tile::wallTextures;
+
 Tile::Tile(CellType type, sf::Vector2f position)
 {
+    if(!Tile::texturesInitialized) this->initializeTextures();
+
     this->type = type;
     this->hitbox.setSize(sf::Vector2f(16, 16));
     this->hitbox.setPosition(position);
 
     this->updateTileType();
+}
+
+void Tile::initializeTextures()
+{
+    sf::Texture texture;
+    texture.loadFromFile("res/textures/wall.png");
+
+    Tile::wallTextures.push_back(texture);
 }
 
 void Tile::updateTileType()

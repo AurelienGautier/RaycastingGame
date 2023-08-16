@@ -14,7 +14,11 @@ private:
 	sf::RectangleShape hitbox;
 	sf::Vector2i gridPosition;
 
+	static bool texturesInitialized;
+	static std::vector<sf::Texture> wallTextures;
+
 	void updateTileType();
+	void initializeTextures();
 
 public:
 	Tile(CellType type, sf::Vector2f position);

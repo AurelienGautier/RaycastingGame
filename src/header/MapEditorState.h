@@ -14,8 +14,7 @@ private:
 
     Button* exitButton;
     Button* saveButton;
-
-    // NumberInput widthInput;
+    Button* changeSizeButton;
 
     void updateKeyboardInputs();
     void updateMouse();
@@ -28,6 +27,7 @@ private:
 
 public:
     MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName);
+    ~MapEditorState();
 
     void update();
 

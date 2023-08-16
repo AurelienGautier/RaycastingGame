@@ -14,6 +14,7 @@ private:
 	sf::CircleShape hitbox;
 	float radius;
 	std::vector<float> rays;
+	std::vector<sf::Vector2f> raysHitPoints;
 	float horizontalFov;
 	float verticalFov;
 	float maxRayLength;
@@ -29,6 +30,7 @@ public:
 
 	// Getters
 	std::vector<float> getRays();
+	std::vector<sf::Vector2f> getRaysHitPoints();
 	sf::Vector2f getPosition();
 	float getRadius();
 	float getMaxRayLength();
@@ -39,7 +41,7 @@ public:
 
 	// Setters
 	void setPosition(float x, float y);
-	void setRaySize(int index, float raySize);
+	void setRaySize(int index, float raySize, sf::Vector2f hitPoint);
 
 	// Public methods
 	void update();
