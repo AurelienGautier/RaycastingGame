@@ -1,13 +1,13 @@
 #include "header/Player.h"
 
-Player::Player(float windowWidth) :
-	radius(8), 
+Player::Player(float windowWidth, sf::Vector2f position, int cellSize) :
+	radius(cellSize / 2), 
 	maxRayLength(400),
 	horizontalFov(90.f),
 	verticalFov(90.f),
 	verticalRotation(0) 
 {
-	this->initHitbox();
+	this->initHitbox(position);
 
 	this->initRays(windowWidth);
 }
@@ -15,11 +15,11 @@ Player::Player(float windowWidth) :
 /*-------------------------------------------------------------------------------*/
 // Initialization methods
 
-void Player::initHitbox()
+void Player::initHitbox(sf::Vector2f position)
 {
 	this->hitbox.setRadius(this->radius);
 
-	this->hitbox.setPosition(sf::Vector2f(32, 32));
+	this->hitbox.setPosition(position);
 
 	this->hitbox.setFillColor(sf::Color::Red);
 

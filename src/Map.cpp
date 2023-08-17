@@ -1,6 +1,8 @@
 #include "header/Map.h"
 
-Map::Map(std::string mapPath) : path(mapPath)
+Map::Map(std::string mapPath) : 
+	path(mapPath),
+	cellSize(32)
 {
 	this->getMapFromFile();
 }
@@ -135,7 +137,7 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 		for (int j = 0; j < intMap[0].size(); j++)
 		{
-			Tile newTile((CellType)intMap[i][j], sf::Vector2f(j * this->cellSize, i * this->cellSize));
+			Tile newTile((CellType)intMap[i][j], sf::Vector2f(j * this->cellSize, i * this->cellSize), this->cellSize);
 
 			newTile.setGridPosition(sf::Vector2i(i, j));
 
@@ -191,6 +193,8 @@ void Map::defineRay(Player &player, int ray)
 			
 			rayLength += delta.y * deltaFactor.y;
 			nextCell.y += deltaFactor.y;
+
+			hitType = HitType::VERTICAL;
 		}
 		// If the next cell is vertical
 		else if (delta.x * slope * deltaFactor.y > delta.y * deltaFactor.y)
@@ -213,7 +217,7 @@ void Map::defineRay(Player &player, int ray)
 
 			hitType = HitType::HORIZONTAL;
 		}
-		
+
 		if (rayLength <= maxRaySize && this->isWall(this->cells[nextCell.y][nextCell.x]))
 		{
 			wallMet = true;

@@ -21,12 +21,12 @@ private:
 	void initializeTextures();
 
 public:
-	Tile(CellType type, sf::Vector2f position);
+	Tile(CellType type, sf::Vector2f position, int size);
 
 	CellType getType();
 	sf::RectangleShape getHitbox();
 	sf::Vector2f getPosition();
-	std::vector<sf::Texture> getTextures();
+	static std::vector<sf::Texture>& getTextures();
 
 	void setType(CellType type);
 	void setGridPosition(sf::Vector2i gridPosition);

@@ -2,8 +2,8 @@
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName) : 
 	State(gameWindow, states),
-	player(gameWindow->getSize().x),
 	map("res/map/" + mapName),
+	player(gameWindow->getSize().x, sf::Vector2f(2 * this->map.getCellsize(), 2 * this->map.getCellsize()), this->map.getCellsize()),
 	isEscapePressed(false)
 {
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
@@ -15,7 +15,7 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_p
 	this->minimapView.setCenter(sf::Vector2f(this->window->getSize().x / 8, this->window->getSize().y / 8));
 	this->minimapView.setSize(sf::Vector2f(this->window->getSize().x / 4, this->window->getSize().y / 4));
 	this->minimapView.setViewport(sf::FloatRect(0, 0, 0.25, 0.25));
-	this->minimapView.zoom(2);
+	this->minimapView.zoom(4);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -87,7 +87,7 @@ void GameState::render3d()
 
 	std::vector<Ray> rays = this->player.getRays();
 
-	float projectionDistance = this->cellSize3d / Glb::tangent(this->player.getVerticalFov() / 2);
+	float projectionDistance = this->map.getCellsize() / Glb::tangent(this->player.getVerticalFov() / 2);
 
 	sf::Vector2f screenSize(this->window->getSize().x, this->window->getSize().y);
 
@@ -116,9 +116,23 @@ void GameState::render3d()
 			int shapePosX = currentColumn;
 			int shapePosY = floorLevel - shapeHeight / 2;
 
-			sf::RectangleShape shape(sf::Vector2f(shapeWidth, shapeHeight));
-			shape.setFillColor(sf::Color(255 * (1 - rays[i].length / 1024), 0, 0));
+			sf::Sprite shape;
+			shape.setTexture(Tile::getTextures()[0]);
+
+			int texturePart = 0;
+
+			if(rays[i].hitType == HitType::HORIZONTAL)
+			{
+				texturePart = rays[i].hitPoint.y - floor(rays[i].hitPoint.y / this->map.getCellsize()) * this->map.getCellsize();
+			}
+			else
+			{
+				texturePart = ceil(rays[i].hitPoint.x / this->map.getCellsize()) * this->map.getCellsize() - rays[i].hitPoint.x;
+			}
+
 			shape.setPosition(shapePosX, shapePosY);
+			shape.setTextureRect(sf::IntRect(texturePart, 0, 1, this->map.getCellsize()));
+			shape.setScale(shapeWidth, shapeHeight / this->map.getCellsize());
 
 			this->window->draw(shape);
 		}

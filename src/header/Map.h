@@ -13,7 +13,7 @@ class Map
 {
 private:
 	std::vector<std::vector<Tile>> cells;
-	const int cellSize = 16;
+	int cellSize;
 	std::string path;
 
 	void getMapFromFile();

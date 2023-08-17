@@ -33,12 +33,12 @@ private:
 	float verticalRotation;
 
 	// Private methods
-	void initHitbox();
+	void initHitbox(sf::Vector2f position);
 	void initRays(float windowWidth);
 
 public:
 	// Constructors
-	Player(float windowWidth);
+	Player(float windowWidth, sf::Vector2f position, int cellSize);
 
 	// Getters
 	std::vector<Ray> getRays();

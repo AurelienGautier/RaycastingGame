@@ -9,11 +9,10 @@
 class GameState : public State
 {
 private:
-	Player player;
 	Map map;
+	Player player;
 	sf::View gameplayView;
 	sf::View minimapView;
-	int const cellSize3d = 32;
 	bool isEscapePressed;
 
 	void updateKeyboardInputs();

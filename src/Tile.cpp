@@ -3,12 +3,12 @@
 bool Tile::texturesInitialized = false;
 std::vector<sf::Texture> Tile::wallTextures;
 
-Tile::Tile(CellType type, sf::Vector2f position)
+Tile::Tile(CellType type, sf::Vector2f position, int size)
 {
     if(!Tile::texturesInitialized) this->initializeTextures();
 
     this->type = type;
-    this->hitbox.setSize(sf::Vector2f(16, 16));
+    this->hitbox.setSize(sf::Vector2f(size, size));
     this->hitbox.setPosition(position);
 
     this->updateTileType();
@@ -45,9 +45,9 @@ sf::Vector2f Tile::getPosition()
     return this->hitbox.getPosition();
 }
 
-std::vector<sf::Texture> Tile::getTextures()
+std::vector<sf::Texture>& Tile::getTextures()
 {
-    return this->wallTextures;
+    return Tile::wallTextures;
 }
 
 void Tile::setType(CellType type)
