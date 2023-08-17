@@ -20,6 +20,8 @@ void Tile::initializeTextures()
     texture.loadFromFile("res/textures/wall.png");
 
     Tile::wallTextures.push_back(texture);
+
+    Tile::texturesInitialized = true;
 }
 
 void Tile::updateTileType()
