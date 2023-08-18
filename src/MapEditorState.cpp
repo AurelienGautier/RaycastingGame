@@ -17,6 +17,15 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 
 /*-------------------------------------------------------------------------------*/
 
+MapEditorState::~MapEditorState()
+{
+    delete this->saveButton;
+    delete this->exitButton;
+    delete this->changeSizeButton;
+}
+
+/*-------------------------------------------------------------------------------*/
+
 void MapEditorState::initInterface()
 {
     this->interfaceView.setCenter(sf::Vector2f(
@@ -29,6 +38,7 @@ void MapEditorState::initInterface()
 
     this->exitButton = new Button(sf::Vector2f(0, 0), "Exit", 32);
     this->saveButton = new Button(sf::Vector2f(0, 40), "Save", 32);
+    this->changeSizeButton = new Button(sf::Vector2f(100, 0), "Change dimensions", 32);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -71,6 +81,8 @@ void MapEditorState::updateButtons()
     {
         this->map.save();
     }
+
+    this->changeSizeButton->update();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -145,6 +157,8 @@ void MapEditorState::renderInterface()
     this->exitButton->render(*this->window);
 
     this->saveButton->render(*this->window);
+
+    this->changeSizeButton->render(*this->window);
 }
 
 /*-------------------------------------------------------------------------------*/

@@ -7,28 +7,41 @@
 #include "Tile.h"
 #include "Global.h"
 
+enum class HitType 
+{
+	HORIZONTAL = 0,
+	VERTICAL
+};
+
+struct Ray
+{
+	float length;
+	sf::Vector2f hitPoint;
+	HitType hitType;;
+};
+
 class Player
 {
 private:
 	// Attributes
 	sf::CircleShape hitbox;
 	float radius;
-	std::vector<float> rays;
+	std::vector<Ray> rays;
 	float horizontalFov;
 	float verticalFov;
 	float maxRayLength;
 	float verticalRotation;
 
 	// Private methods
-	void initHitbox();
+	void initHitbox(sf::Vector2f position);
 	void initRays(float windowWidth);
 
 public:
 	// Constructors
-	Player(float windowWidth);
+	Player(float windowWidth, sf::Vector2f position, int cellSize);
 
 	// Getters
-	std::vector<float> getRays();
+	std::vector<Ray> getRays();
 	sf::Vector2f getPosition();
 	float getRadius();
 	float getMaxRayLength();
@@ -39,7 +52,7 @@ public:
 
 	// Setters
 	void setPosition(float x, float y);
-	void setRaySize(int index, float raySize);
+	void updateRay(int index, float raySize, sf::Vector2f hitPoint, HitType HitType);
 
 	// Public methods
 	void update();

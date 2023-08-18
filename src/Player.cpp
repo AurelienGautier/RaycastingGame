@@ -1,13 +1,13 @@
 #include "header/Player.h"
 
-Player::Player(float windowWidth) :
-	radius(8), 
+Player::Player(float windowWidth, sf::Vector2f position, int cellSize) :
+	radius(cellSize / 2), 
 	maxRayLength(400),
 	horizontalFov(90.f),
 	verticalFov(90.f),
 	verticalRotation(0) 
 {
-	this->initHitbox();
+	this->initHitbox(position);
 
 	this->initRays(windowWidth);
 }
@@ -15,11 +15,11 @@ Player::Player(float windowWidth) :
 /*-------------------------------------------------------------------------------*/
 // Initialization methods
 
-void Player::initHitbox()
+void Player::initHitbox(sf::Vector2f position)
 {
 	this->hitbox.setRadius(this->radius);
 
-	this->hitbox.setPosition(sf::Vector2f(32, 32));
+	this->hitbox.setPosition(position);
 
 	this->hitbox.setFillColor(sf::Color::Red);
 
@@ -30,18 +30,21 @@ void Player::initRays(float windowWidth)
 {
 	for (float i = 0; i <= windowWidth; i++)
 	{
-		this->rays.push_back(this->maxRayLength);
+		Ray newRay;
+		newRay.length = this->maxRayLength;
+		newRay.hitPoint = sf::Vector2f(0, 0);
+
+		this->rays.push_back(newRay);
 	}
 }
 
 /*-------------------------------------------------------------------------------*/
 // Getters
 
-std::vector<float> Player::getRays()
+std::vector<Ray> Player::getRays()
 {
 	return this->rays;
 }
-
 
 sf::Vector2f Player::getPosition()
 {
@@ -86,14 +89,17 @@ float Player::getVerticalFov()
 
 /*-------------------------------------------------------------------------------*/
 // Setters
+
 void Player::setPosition(float x, float y)
 {
 	this->hitbox.setPosition(x, y);
 }
 
-void Player::setRaySize(int index, float raySize)
+void Player::updateRay(int index, float raySize, sf::Vector2f hitPoint, HitType hitType)
 {
-	this->rays[index] = raySize;
+	this->rays[index].length = raySize;
+	this->rays[index].hitPoint = hitPoint;
+	this->rays[index].hitType = hitType;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -103,7 +109,7 @@ void Player::update()
 {
 	for (int i = 0; i < this->rays.size(); i++)
 	{
-		this->rays[i] = this->maxRayLength;
+		this->rays[i].length = this->maxRayLength;
 	}
 }
 
@@ -123,8 +129,8 @@ void Player::render(sf::RenderWindow& window, sf::View& view)
 		float angle = this->calculateRayAngle(i);
 
 		fovVisualization[1 + i].position = sf::Vector2f(
-			this->getPosition().x + rays[i] * Glb::cosine(angle),
-			this->getPosition().y + rays[i] * Glb::sinus(angle));
+			this->getPosition().x + rays[i].length * Glb::cosine(angle),
+			this->getPosition().y + rays[i].length * Glb::sinus(angle));
 	}
 
 	window.draw(fovVisualization);

@@ -1,6 +1,8 @@
 #include "header/Map.h"
 
-Map::Map(std::string mapPath) : path(mapPath)
+Map::Map(std::string mapPath) : 
+	path(mapPath),
+	cellSize(32)
 {
 	this->getMapFromFile();
 }
@@ -135,7 +137,7 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 		for (int j = 0; j < intMap[0].size(); j++)
 		{
-			Tile newTile((CellType)intMap[i][j], sf::Vector2f(j * this->cellSize, i * this->cellSize));
+			Tile newTile((CellType)intMap[i][j], sf::Vector2f(j * this->cellSize, i * this->cellSize), this->cellSize);
 
 			newTile.setGridPosition(sf::Vector2i(i, j));
 
@@ -148,17 +150,17 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 void Map::updateFovContact(Player& player)
 {
-	std::vector<float> rays = player.getRays();
+	std::vector<Ray> rays = player.getRays();
 
 	for (int i = 0; i < rays.size(); i++)
 	{
-		player.setRaySize(i, this->getRaySize(player, i));
+		this->defineRay(player, i);
 	}
 }
 
 /*-------------------------------------------------------------------------------*/
 
-float Map::getRaySize(Player &player, int ray)
+void Map::defineRay(Player &player, int ray)
 {
 	float rayLength = 0;
 
@@ -171,6 +173,8 @@ float Map::getRaySize(Player &player, int ray)
 	float angle = player.calculateRayAngle(ray);
 
 	float slope = Glb::tangent(angle);
+
+	HitType hitType;
 
 	while (rayLength < maxRaySize && !wallMet)
 	{
@@ -189,6 +193,8 @@ float Map::getRaySize(Player &player, int ray)
 			
 			rayLength += delta.y * deltaFactor.y;
 			nextCell.y += deltaFactor.y;
+
+			hitType = HitType::VERTICAL;
 		}
 		// If the next cell is vertical
 		else if (delta.x * slope * deltaFactor.y > delta.y * deltaFactor.y)
@@ -198,6 +204,8 @@ float Map::getRaySize(Player &player, int ray)
 
 			rayLength += delta.y / Glb::sinus(angle);
 			nextCell.y += deltaFactor.y;
+
+			hitType = HitType::VERTICAL; 
 		}
 		else // If the next cell is horizontal
 		{
@@ -206,17 +214,16 @@ float Map::getRaySize(Player &player, int ray)
 
 			rayLength += delta.x / Glb::cosine(angle);
 			nextCell.x += deltaFactor.x;
+
+			hitType = HitType::HORIZONTAL;
 		}
-		
+
 		if (rayLength <= maxRaySize && this->isWall(this->cells[nextCell.y][nextCell.x]))
 		{
 			wallMet = true;
+			player.updateRay(ray, rayLength, startPoint, hitType);
 		}
 	}
-
-	if (!wallMet) rayLength = maxRaySize;
-
-	return rayLength;
 }
 
 /*-------------------------------------------------------------------------------*/
