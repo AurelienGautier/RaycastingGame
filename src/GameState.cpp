@@ -93,6 +93,19 @@ void GameState::render3d()
 
 	float floorLevel = screenSize.y / 2 * (1 + Glb::tangent(this->player.getVerticalRotation()) / Glb::tangent(this->player.getVerticalFov() / 2));
 
+	// Displaying the sky
+	sf::RectangleShape skyShape(sf::Vector2f(screenSize.x, screenSize.y));
+	skyShape.setFillColor(sf::Color(0, 120, 255));
+	skyShape.setPosition(0, 0);
+	this->window->draw(skyShape);
+
+	// Displaying the floor
+	sf::RectangleShape floorShape(sf::Vector2f(screenSize.x, screenSize.y - floorLevel));
+	floorShape.setFillColor(sf::Color(0, 255, 0));
+	floorShape.setPosition(0, floorLevel);
+	this->window->draw(floorShape);
+
+	// Displaying the walls
 	for (int i = 0; i < screenSize.x; i++)
 	{
 		if (rays[i].length < this->player.getMaxRayLength())

@@ -19,6 +19,7 @@ private:
 	void updateMouseInputs();
 
 	void render3d();
+	void render3dFloor();
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName);
 

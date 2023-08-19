@@ -2,7 +2,7 @@
 
 Player::Player(float windowWidth, sf::Vector2f position, int cellSize) :
 	radius(cellSize / 2), 
-	maxRayLength(400),
+	maxRayLength(2000),
 	horizontalFov(90.f),
 	verticalFov(90.f),
 	verticalRotation(0) 
