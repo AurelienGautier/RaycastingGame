@@ -11,20 +11,18 @@ class Tile
 {
 private:
 	CellType type;
-	sf::RectangleShape hitbox;
 	sf::Vector2i gridPosition;
+	sf::Vector2f position;
 
 	static bool texturesInitialized;
 	static std::vector<sf::Texture> wallTextures;
 
-	void updateTileType();
 	void initializeTextures();
 
 public:
 	Tile(CellType type, sf::Vector2f position, int size);
 
 	CellType getType();
-	sf::RectangleShape getHitbox();
 	sf::Vector2f getPosition();
 	static std::vector<sf::Texture>& getTextures();
 

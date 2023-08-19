@@ -7,11 +7,9 @@ Tile::Tile(CellType type, sf::Vector2f position, int size)
 {
     if(!Tile::texturesInitialized) this->initializeTextures();
 
+    this->position = position;
+    
     this->type = type;
-    this->hitbox.setSize(sf::Vector2f(size, size));
-    this->hitbox.setPosition(position);
-
-    this->updateTileType();
 }
 
 void Tile::initializeTextures()
@@ -24,27 +22,14 @@ void Tile::initializeTextures()
     Tile::texturesInitialized = true;
 }
 
-void Tile::updateTileType()
-{
-    if (this->type == CellType::WALL)
-        this->hitbox.setFillColor(sf::Color::Red);
-    else if (this->type == CellType::EMPTY)
-        this->hitbox.setFillColor(sf::Color::Black);
-}
-
 CellType Tile::getType()
 {
     return this->type;
 }
 
-sf::RectangleShape Tile::getHitbox()
-{
-    return this->hitbox;
-}
-
 sf::Vector2f Tile::getPosition()
 {
-    return this->hitbox.getPosition();
+    return this->position;
 }
 
 std::vector<sf::Texture>& Tile::getTextures()
@@ -55,8 +40,6 @@ std::vector<sf::Texture>& Tile::getTextures()
 void Tile::setType(CellType type)
 {
     this->type = type;
-
-    this->updateTileType();
 }
 
 void Tile::setGridPosition(sf::Vector2i gridPosition)

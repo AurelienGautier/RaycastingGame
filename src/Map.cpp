@@ -24,7 +24,22 @@ void Map::render(sf::RenderWindow& window, sf::View& view)
 	{
 		for (int j = 0; j < this->cells[0].size(); j++)
 		{
-			window.draw(this->cells[i][j].getHitbox());
+			if(this->cells[i][j].getType() == CellType::WALL)
+			{
+				sf::Sprite shape;
+				shape.setTexture(Tile::getTextures()[0]);
+				shape.setPosition(this->cells[i][j].getPosition());
+
+				window.draw(shape);
+			}
+			else 
+			{
+				sf::RectangleShape shape(sf::Vector2f(this->cellSize, this->cellSize));
+				shape.setFillColor(sf::Color(0, 0, 0));
+				shape.setPosition(this->cells[i][j].getPosition());
+
+				window.draw(shape);
+			}
 		}
 	}
 }
