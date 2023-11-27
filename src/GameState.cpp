@@ -1,4 +1,5 @@
 #include "header/GameState.h"
+#include <iostream>
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName) : 
 	State(gameWindow, states),
@@ -143,9 +144,13 @@ void GameState::render3d()
 				texturePart = ceil(rays[i].hitPoint.x / this->map.getCellsize()) * this->map.getCellsize() - rays[i].hitPoint.x;
 			}
 
+			float part = Tile::getTextures()[0].getSize().x / this->map.getCellsize();
+
 			shape.setPosition(shapePosX, shapePosY);
-			shape.setTextureRect(sf::IntRect(texturePart, 0, 1, this->map.getCellsize()));
-			shape.setScale(shapeWidth, shapeHeight / this->map.getCellsize());
+
+			shape.setTextureRect(sf::IntRect(texturePart * part, 0, part, Tile::getTextures()[0].getSize().y));
+
+			shape.setScale(shapeWidth / part, (shapeHeight / this->map.getCellsize()) / part);
 
 			this->window->draw(shape);
 		}
