@@ -1,4 +1,5 @@
 #include "header/Map.h"
+#include <iostream>
 
 Map::Map(std::string mapPath) : 
 	path(mapPath),
@@ -28,6 +29,8 @@ void Map::render(sf::RenderWindow& window, sf::View& view)
 			{
 				sf::Sprite shape;
 				shape.setTexture(Tile::getTextures()[0]);
+				shape.setScale((float)this->cellSize / (float)Tile::getTextures()[0].getSize().x, (float)this->cellSize / (float)Tile::getTextures()[0].getSize().x);
+				
 				shape.setPosition(this->cells[i][j].getPosition());
 
 				window.draw(shape);
