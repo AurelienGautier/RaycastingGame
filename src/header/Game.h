@@ -16,11 +16,13 @@ class Game
 private:
 	std::shared_ptr<sf::RenderWindow> window;
 	sf::Event event;
-	std::shared_ptr<std::stack<std::unique_ptr<State>>> currentStates;
+	State* currentState;
 
 public:
 	Game();
 	~Game();
+
+	void setState(State* state);
 
 	void initWindow();
 	void initStates();
@@ -32,4 +34,3 @@ public:
 
 	void render();
 };
-

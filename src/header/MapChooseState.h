@@ -4,6 +4,7 @@
 #include "Button.h"
 #include "GameState.h"
 #include "MapEditorState.h"
+#include "Game.h"
 
 #include <filesystem>
 
@@ -22,8 +23,13 @@ private:
     // Functions
     void getMapList();
 
+    MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
+    static MapChooseState* instance;
+    void setChooseReason(MapChooseReason mapChooseReason);
+
 public:
-    MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, MapChooseReason mapChooseReason);
+    static MapChooseState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, MapChooseReason mapChooseReason);
+
     void update();
     void render();
 };

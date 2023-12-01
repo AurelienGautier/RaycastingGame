@@ -2,6 +2,7 @@
 
 #include "State.h"
 #include "Button.h"
+#include "Game.h"
 
 class PauseMenuState : public State 
 {
@@ -10,8 +11,11 @@ private:
     Button resumeButton;
     Button goBackToMainMenu;
 
+    static PauseMenuState* instance;
+    PauseMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
+
 public:
-    PauseMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
+    static PauseMenuState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
 
     void update();
     void updateButtons();

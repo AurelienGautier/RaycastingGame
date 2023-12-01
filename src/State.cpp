@@ -1,12 +1,15 @@
 #include "header/State.h"
+#include "header/Game.h"
 
 bool State::defaultViewSet = false;
 sf::View State::defaultView;
 
-State::State(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states)
+/*-------------------------------------------------------------------------------*/
+
+State::State(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game)
 {
 	this->window = gameWindow;
-	this->currentStates = states;
+    this->game = game;
 
     if(!State::defaultViewSet)
     {
@@ -15,6 +18,8 @@ State::State(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::
 
     State::setDefaultView();
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void State::initDefaultView()
 {
@@ -32,12 +37,16 @@ void State::initDefaultView()
     State::defaultViewSet = true;
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void State::setDefaultView()
 {
     this->window->setView(State::defaultView);
 
     sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 }
+
+/*-------------------------------------------------------------------------------*/
 
 bool State::isKeyPressed(bool& keyPressed, bool sfKeyPressed)
 {
@@ -57,9 +66,4 @@ bool State::isKeyPressed(bool& keyPressed, bool sfKeyPressed)
     return false;
 }
 
-void State::deleteState()
-{
-    State::setDefaultView();
-    
-    this->currentStates->pop();
-}
+/*-------------------------------------------------------------------------------*/

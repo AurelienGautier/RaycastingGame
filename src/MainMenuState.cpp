@@ -1,12 +1,28 @@
 #include "header/MainMenuState.h"
 
-MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states) :
-    State(gameWindow, states),
+MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game) :
+    State(gameWindow, game),
     playButton(sf::Vector2f(200, 200), "Play", 32),
     mapEditorButton(sf::Vector2f(200, 300), "MapEditor", 32),
     leaveButton(sf::Vector2f(200, 400), "Quit", 32)
 {
 }
+
+/*-------------------------------------------------------------------------------*/
+
+MainMenuState* MainMenuState::instance = nullptr;
+
+MainMenuState* MainMenuState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game)
+{
+    if(instance == nullptr)
+	{
+		instance = new MainMenuState(gameWindow, game);
+	}
+
+	return instance;
+}
+
+/*-------------------------------------------------------------------------------*/
 
 void MainMenuState::update()
 {
@@ -14,6 +30,8 @@ void MainMenuState::update()
 
     this->updateButtons();
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void MainMenuState::updateButtons()
 {
@@ -23,14 +41,14 @@ void MainMenuState::updateButtons()
     
     if(this->playButton.isClicked(mousePosition))
     {
-        this->currentStates->push(std::make_unique<MapChooseState>(this->window, this->currentStates, MapChooseReason::PLAY));
+        this->game->setState(MapChooseState::getInstance(this->window, this->game, MapChooseReason::PLAY));
     }
 
     this->mapEditorButton.update();
 
     if(this->mapEditorButton.isClicked(mousePosition))
     {
-        this->currentStates->push(std::make_unique<MapChooseState>(this->window, this->currentStates, MapChooseReason::EDIT));
+        this->game->setState(MapChooseState::getInstance(this->window, this->game, MapChooseReason::EDIT));
     }
 
     this->leaveButton.update();
@@ -41,9 +59,13 @@ void MainMenuState::updateButtons()
     }
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void MainMenuState::render()
 {
     this->playButton.render(*this->window);
     this->mapEditorButton.render(*this->window);
     this->leaveButton.render(*this->window);
 }
+
+/*-------------------------------------------------------------------------------*/

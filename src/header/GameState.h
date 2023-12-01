@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Global.h"
 #include "PauseMenuState.h"
+#include "Game.h"
 
 class GameState : public State
 {
@@ -20,8 +21,13 @@ private:
 
 	void render3d();
 	void render3dFloor();
+
+	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName);
+	static GameState* instance;
+
 public:
-	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName);
+	static GameState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName);
+	static GameState* getInstance();
 
 	void update();
 

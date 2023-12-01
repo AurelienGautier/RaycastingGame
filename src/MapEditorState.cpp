@@ -1,7 +1,7 @@
 #include "header/MapEditorState.h"
 
-MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName) :
-    State(gameWindow, states),
+MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName) :
+    State(gameWindow, game),
     map("res/map/" + mapName)
 {
     this->initInterface();
@@ -13,6 +13,20 @@ MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, std
 
 	this->mapView.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y * 0.84));
 	this->mapView.setViewport(sf::FloatRect(0, 0.16, 1, 0.84));
+}
+
+/*-------------------------------------------------------------------------------*/
+
+MapEditorState* MapEditorState::instance = nullptr;
+
+MapEditorState* MapEditorState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName)
+{
+    if(instance == nullptr)
+	{
+		instance = new MapEditorState(gameWindow, game, mapName);
+	}
+
+	return instance;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -71,8 +85,7 @@ void MapEditorState::updateButtons()
 
     if(this->exitButton->isClicked(mousePosition))
     {
-        this->deleteState();
-        this->currentStates->pop();
+        this->game->setState(MainMenuState::getInstance(this->window, this->game));
     }
 
     this->saveButton->update();

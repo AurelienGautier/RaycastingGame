@@ -1,8 +1,8 @@
 #include "header/GameState.h"
 #include <iostream>
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string mapName) : 
-	State(gameWindow, states),
+GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName) : 
+	State(gameWindow, game),
 	map("res/map/" + mapName),
 	player(gameWindow->getSize().x, sf::Vector2f(2 * this->map.getCellsize(), 2 * this->map.getCellsize()), this->map.getCellsize()),
 	isEscapePressed(false)
@@ -17,6 +17,27 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_p
 	this->minimapView.setSize(sf::Vector2f(this->window->getSize().x / 4, this->window->getSize().y / 4));
 	this->minimapView.setViewport(sf::FloatRect(0, 0, 0.25, 0.25));
 	this->minimapView.zoom(4);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+GameState* GameState::instance = nullptr;
+
+GameState* GameState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName)
+{
+	if(instance == nullptr)
+	{
+		instance = new GameState(gameWindow, game, mapName);
+	}
+
+	return instance;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+GameState* GameState::getInstance()
+{
+	return instance;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -48,7 +69,7 @@ void GameState::updateKeyboardInputs()
 	// pause
 	if(this->isKeyPressed(this->isEscapePressed, sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
 	{
-		(*this->currentStates).push(std::make_unique<PauseMenuState>(this->window, this->currentStates));
+		this->game->setState(PauseMenuState::getInstance(this->window, this->game));
 	}
 }
 

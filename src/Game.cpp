@@ -10,6 +10,14 @@ Game::Game()
 
 Game::~Game()
 {
+    delete this->currentState;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Game::setState(State* state)
+{
+    this->currentState = state;
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -24,9 +32,7 @@ void Game::initWindow()
 
 void Game::initStates()
 {
-    this->currentStates = std::make_shared<std::stack<std::unique_ptr<State>>>();
-
-    this->currentStates->push(std::make_unique<MainMenuState>(this->window, this->currentStates));
+    this->currentState = MainMenuState::getInstance(this->window, this);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -46,7 +52,7 @@ void Game::update()
 {
     this->updateEvents();
 
-    (*this->currentStates).top()->update();
+    this->currentState->update();
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -66,7 +72,7 @@ void Game::render()
 {
     this->window->clear();
 
-    (*this->currentStates).top()->render();
+    this->currentState->render();
 
     this->window->display();
 }

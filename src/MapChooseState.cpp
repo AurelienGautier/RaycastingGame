@@ -1,12 +1,35 @@
 #include "header/MapChooseState.h"
-#include <iostream>
 
-MapChooseState::MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, MapChooseReason mapChooseReason) :
-    State(gameWindow, states),
-    mapChooseReason(mapChooseReason)
+MapChooseState::MapChooseState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game) :
+    State(gameWindow, game)
 {
     this->getMapList();
 }
+
+/*-------------------------------------------------------------------------------*/
+
+MapChooseState* MapChooseState::instance = nullptr;
+
+MapChooseState* MapChooseState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, MapChooseReason mapChooseReason)
+{
+    if(instance == nullptr)
+	{
+		instance = new MapChooseState(gameWindow, game);
+	}
+
+    instance->setChooseReason(mapChooseReason);
+
+	return instance;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void MapChooseState::setChooseReason(MapChooseReason mapChooseReason)
+{
+    this->mapChooseReason = mapChooseReason;
+}
+
+/*-------------------------------------------------------------------------------*/
 
 void MapChooseState::getMapList()
 {
@@ -27,6 +50,8 @@ void MapChooseState::getMapList()
     }
 }
 
+/*-------------------------------------------------------------------------------*/
+
 void MapChooseState::update()
 {
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
@@ -39,23 +64,17 @@ void MapChooseState::update()
         {
             if(this->mapChooseReason == MapChooseReason::PLAY)
             {
-                this->currentStates->push(std::make_unique<GameState>(
-                    this->window, 
-                    this->currentStates, 
-                    this->mapButtonList[i].getText())
-                );
+                this->game->setState(GameState::getInstance(this->window, this->game, this->mapButtonList[i].getText()));
             }
             else if(this->mapChooseReason == MapChooseReason::EDIT)
             {
-                this->currentStates->push(std::make_unique<MapEditorState>(
-                    this->window, 
-                    this->currentStates, 
-                    this->mapButtonList[i].getText())
-                );
+                this->game->setState(MapEditorState::getInstance(this->window, this->game, this->mapButtonList[i].getText()));
             }
         }
     }
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void MapChooseState::render()
 {
@@ -64,3 +83,5 @@ void MapChooseState::render()
         this->mapButtonList[i].render(*this->window);
     }
 }
+
+/*-------------------------------------------------------------------------------*/

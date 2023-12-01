@@ -6,6 +6,7 @@
 #include "Button.h"
 
 #include "NumberInput.h"
+#include "Game.h"
 
 class MainMenuState : public State
 {
@@ -14,8 +15,11 @@ private:
     Button leaveButton;
     Button mapEditorButton;
 
+    MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
+    static MainMenuState* instance;
+
 public:
-    MainMenuState(std::shared_ptr<sf::RenderWindow> gameWindow, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
+    static MainMenuState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
 
     void update();
     void updateButtons();
