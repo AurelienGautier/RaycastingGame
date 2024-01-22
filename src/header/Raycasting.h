@@ -13,6 +13,6 @@ public:
     Raycasting();
     ~Raycasting();
 
-    void update(Player& player);
-    void render(sf::RenderWindow& window);
+    void update(Player& player, Map& map);
+    void render(sf::RenderWindow& window, Player& player, Map& map);
 };

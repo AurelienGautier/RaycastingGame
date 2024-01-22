@@ -21,7 +21,6 @@ private:
 	void updateKeyboardInputs();
 	void updateMouseInputs();
 
-	void render3d();
 	void render3dFloor();
 
 	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName);

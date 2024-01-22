@@ -60,7 +60,7 @@ void GameState::update()
 	this->updateMouseInputs();
 	this->player.update();
 	this->map.update(this->player);
-	this->raycasting.update(this->player);
+	this->raycasting.update(this->player, this->map);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -105,90 +105,14 @@ void GameState::updateMouseInputs()
 
 void GameState::render()
 {
-	this->render3d();
-	this->raycasting.render(*this->window);
+	this->window->setView(this->gameplayView);
+	
+	this->raycasting.render(*this->window, this->player, this->map);
 
 	this->map.render(*this->window, this->minimapView);
 
 	this->player.render(*this->window, this->minimapView);
 
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void GameState::render3d()
-{
-	this->window->setView(this->gameplayView);
-
-	std::vector<Ray> rays = this->player.getRays();
-
-	float projectionDistance = this->map.getCellsize() / Glb::tangent(this->player.getVerticalFov() / 2);
-
-	sf::Vector2f screenSize(this->window->getSize().x, this->window->getSize().y);
-
-	float floorLevel = screenSize.y / 2 * (1 + Glb::tangent(this->player.getVerticalRotation()) / Glb::tangent(this->player.getVerticalFov() / 2));
-
-	// Displaying the sky
-	sf::RectangleShape skyShape(sf::Vector2f(screenSize.x, screenSize.y));
-	skyShape.setFillColor(sf::Color(0, 120, 255));
-	skyShape.setPosition(0, 0);
-	this->window->draw(skyShape);
-
-	// Displaying the floor
-	sf::RectangleShape floorShape(sf::Vector2f(screenSize.x, screenSize.y - floorLevel));
-	floorShape.setFillColor(sf::Color(0, 255, 0));
-	floorShape.setPosition(0, floorLevel);
-	this->window->draw(floorShape);
-
-	// Displaying the walls
-	for (int i = 0; i < screenSize.x; i++)
-	{
-		if (rays[i].length < this->player.getMaxRayLength())
-		{
-			float rayAngle = this->player.getHorizontalFov() * (floor(screenSize.x) / 2 - i) / (screenSize.x - 1);
-			float rayProjectionPosition = Glb::tangent(rayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
-
-			int currentColumn = round(screenSize.x * (0.5f - rayProjectionPosition));
-			int nextColumn = screenSize.x;
-
-			if(i < screenSize.x - 1)
-			{
-				float nextRayAngle = this->player.getHorizontalFov() * (floor(screenSize.x) / 2 - 1 - i) / (screenSize.x - 1);
-				rayProjectionPosition = Glb::tangent(nextRayAngle) / 2 / Glb::tangent(this->player.getHorizontalFov() / 2);
-				nextColumn = round(screenSize.x * (0.5f - rayProjectionPosition));
-			}
-
-			float shapeWidth = std::max(1, nextColumn - currentColumn);
-			float shapeHeight = screenSize.y * projectionDistance / (rays[i].length * Glb::cosine(rayAngle));
-
-			int shapePosX = currentColumn;
-			int shapePosY = floorLevel - shapeHeight / 2;
-
-			sf::Sprite shape;
-			shape.setTexture(Tile::getTextures()[0]);
-
-			int texturePart = 0;
-
-			if(rays[i].hitType == HitType::HORIZONTAL)
-			{
-				texturePart = rays[i].hitPoint.y - floor(rays[i].hitPoint.y / this->map.getCellsize()) * this->map.getCellsize();
-			}
-			else
-			{
-				texturePart = ceil(rays[i].hitPoint.x / this->map.getCellsize()) * this->map.getCellsize() - rays[i].hitPoint.x;
-			}
-
-			float part = Tile::getTextures()[0].getSize().x / this->map.getCellsize();
-
-			shape.setPosition(shapePosX, shapePosY);
-
-			shape.setTextureRect(sf::IntRect(texturePart * part, 0, part, Tile::getTextures()[0].getSize().y));
-
-			shape.setScale(shapeWidth / part, (shapeHeight / this->map.getCellsize()) / part);
-
-			this->window->draw(shape);
-		}
-	}
 }
 
 /*-------------------------------------------------------------------------------*/

@@ -42,5 +42,7 @@ public:
 	void changeCell(int cellX, int cellY, CellType cellType);
 
 	void save();
+
+	std::vector<std::vector<Tile>> getCells() { return this->cells;}
 };
 
