@@ -12,7 +12,6 @@ Map::Map(std::string mapPath) :
 
 void Map::update(Player& player)
 {
-	this->updateFovContact(player);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -97,20 +96,20 @@ bool Map::canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove)
 	// Checks the up left cell
 	int x = floor(cellX);
 	int y = floor(cellY);
-	if(this->isWall(this->cells[y][x])) return false;
+	if(this->isWall(x, y)) return false;
 
 	// Checks the up right cell
 	x = ceil(cellX);
-	if(this->isWall(this->cells[y][x])) return false;
+	if(this->isWall(x, y)) return false;
 
 	// Checks the down left cell
 	x = floor(cellX);
 	y = ceil(cellY);
-	if(this->isWall(this->cells[y][x])) return false;
+	if(this->isWall(x, y)) return false;
 
 	// Checks the down right cell
 	x = ceil(cellX);
-	if(this->isWall(this->cells[y][x])) return false;
+	if(this->isWall(x, y)) return false;
 
 	return true;
 }
@@ -166,9 +165,9 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 /*-------------------------------------------------------------------------------*/
 
-bool Map::isWall(Tile cell)
+bool Map::isWall(int x, int y)
 {
-	if(cell.getType() != CellType::EMPTY) return true;
+	if(this->cells[y][x].getType() != CellType::EMPTY) return true;
 	return false;
 }
 
@@ -208,150 +207,3 @@ void Map::save()
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::updateFovContact(Player& player)
-{
-	std::vector<Ray> rays = player.getRays();
-
-	for (int i = 0; i < rays.size(); i++)
-	{
-		this->defineRay(player, i);
-	}
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Map::defineRay(Player &player, int ray)
-{
-	float rayLength = 0;
-
-	sf::Vector2f startPoint = player.getPosition();
-
-	bool wallMet = false;
-
-	int maxRaySize = player.getMaxRayLength();
-
-	float angle = player.calculateRayAngle(ray);
-
-	float slope = Glb::tangent(angle);
-
-	HitType hitType;
-
-	while (rayLength < maxRaySize && !wallMet)
-	{
-		sf::Vector2i deltaFactor = this->getDeltaFactor(angle);
-
-		sf::Vector2f cellPos = this->getCellPos(startPoint, deltaFactor);
-
-		sf::Vector2f delta = this->getDelta(cellPos, deltaFactor, startPoint);
-
-		sf::Vector2f nextCell(cellPos);
-
-		// For vertical angles
-		if (floor(angle) == 90 || floor(angle) == 270)
-		{
-			startPoint.y += delta.y;
-			
-			rayLength += delta.y * deltaFactor.y;
-			nextCell.y += deltaFactor.y;
-
-			hitType = HitType::VERTICAL;
-		}
-		// If the next cell is vertical
-		else if (delta.x * slope * deltaFactor.y > delta.y * deltaFactor.y)
-		{
-			startPoint.x += delta.y / slope;
-			startPoint.y += delta.y;
-
-			rayLength += delta.y / Glb::sinus(angle);
-			nextCell.y += deltaFactor.y;
-
-			hitType = HitType::VERTICAL; 
-		}
-		else // If the next cell is horizontal
-		{
-			startPoint.x += delta.x;
-			startPoint.y += delta.x * slope;
-
-			rayLength += delta.x / Glb::cosine(angle);
-			nextCell.x += deltaFactor.x;
-
-			hitType = HitType::HORIZONTAL;
-		}
-
-		if (rayLength <= maxRaySize && this->isWall(this->cells[nextCell.y][nextCell.x]))
-		{
-			wallMet = true;
-			player.updateRay(ray, rayLength, startPoint, hitType);
-		}
-	}
-}
-
-/*-------------------------------------------------------------------------------*/
-
-sf::Vector2i Map::getDeltaFactor(float angle)
-{
-	sf::Vector2i deltaFactor;
-
-	if (angle >= 0 && angle < 90)
-	{
-		deltaFactor.x = 1;
-		deltaFactor.y = 1;
-	}
-	else if (angle >= 90 && angle < 180)
-	{
-		deltaFactor.x = -1;
-		deltaFactor.y = 1;
-	}
-	else if (angle >= 180 && angle < 270)
-	{
-		deltaFactor.x = -1;
-		deltaFactor.y = -1;
-	}
-	else if (angle >= 270 && angle < 360)
-	{
-		deltaFactor.x = 1;
-		deltaFactor.y = -1;
-	}
-
-	return deltaFactor;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-sf::Vector2f Map::getDelta(sf::Vector2f cellPos, sf::Vector2i deltaFactor, sf::Vector2f startPoint)
-{
-	sf::Vector2f delta(
-		(cellPos.x + deltaFactor.x) * this->cellSize - startPoint.x,
-		(cellPos.y + deltaFactor.y) * this->cellSize - startPoint.y
-	);
-
-	if (delta.y <= 0 && delta.y != -cellSize)
-		delta.y += this->cellSize;
-	if (delta.x <= 0 && delta.x != -cellSize)
-		delta.x += this->cellSize;
-
-	return delta;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-sf::Vector2f Map::getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaFactor)
-{
-	sf::Vector2f cellPos(
-		floor(startPoint.x / this->cellSize),
-		floor(startPoint.y / this->cellSize)
-	);
-
-	if (floor(startPoint.y) == startPoint.y && (int)startPoint.y % cellSize == 0 && deltaFactor.y == -1)
-	{
-		cellPos.y--;
-	}
-	if (floor(startPoint.x) == startPoint.x && (int)startPoint.x % cellSize == 0 && deltaFactor.x == -1)
-	{
-		cellPos.x--;
-	}
-
-	return cellPos;
-}
-
-/*-------------------------------------------------------------------------------*/
