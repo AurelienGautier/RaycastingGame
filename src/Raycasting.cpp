@@ -1,7 +1,11 @@
 #include "header/Raycasting.h"
 
-Raycasting::Raycasting()
+Raycasting::Raycasting(float windowWidth) : 
+    maxRayLength(2000),
+    horizontalFov(90.f),
+	verticalFov(90.f)
 {
+    this->initRays(windowWidth);
 }
 
 Raycasting::~Raycasting()
@@ -10,11 +14,52 @@ Raycasting::~Raycasting()
 
 /*-------------------------------------------------------------------------------*/
 
+void Raycasting::initRays(float windowWidth)
+{
+	for (float i = 0; i <= windowWidth; i++)
+	{
+		Ray newRay;
+		newRay.length = this->maxRayLength;
+		newRay.hitPoint = sf::Vector2f(0, 0);
+
+		this->rays.push_back(newRay);
+	}
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Raycasting::updateRay(int index, float raySize, sf::Vector2f hitPoint, HitType hitType)
+{
+	this->rays[index].length = raySize;
+	this->rays[index].hitPoint = hitPoint;
+	this->rays[index].hitType = hitType;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+float Raycasting::calculateRayAngle(int rayIndex, Player& player)
+{
+	float playerFovStart = player.getHorizontalRotation() - this->horizontalFov / 2;
+	float rayPerDegree = this->horizontalFov / this->rays.size();
+
+	float angle = playerFovStart + rayPerDegree * rayIndex;
+
+	if(angle < 0) angle += 360;
+	else if(angle >= 360) angle -= 360;
+
+	return angle;
+}
+
+/*-------------------------------------------------------------------------------*/
+
 void Raycasting::update(Player& player, Map& map)
 {
-    std::vector<Ray> rays = player.getRays();
+    for (int i = 0; i < this->rays.size(); i++)
+	{
+		this->rays[i].length = this->maxRayLength;
+	}
 
-    for (int i = 0; i < rays.size(); i++)
+    for (int i = 0; i < this->rays.size(); i++)
 	{
 		this->defineRay(player, i, map);
 	}
@@ -30,9 +75,9 @@ void Raycasting::defineRay(Player &player, int ray, Map& map)
 
 	bool wallMet = false;
 
-	int maxRaySize = player.getMaxRayLength();
+	int maxRaySize = this->maxRayLength;
 
-	float angle = player.calculateRayAngle(ray);
+	float angle = this->calculateRayAngle(ray, player);
 
 	float slope = Glb::tangent(angle);
 
@@ -83,7 +128,7 @@ void Raycasting::defineRay(Player &player, int ray, Map& map)
 		if (rayLength <= maxRaySize && map.isWall(nextCell.x, nextCell.y))
 		{
 			wallMet = true;
-			player.updateRay(ray, rayLength, startPoint, hitType);
+			this->updateRay(ray, rayLength, startPoint, hitType);
 		}
 	}
 }
@@ -160,13 +205,11 @@ sf::Vector2f Raycasting::getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaF
 
 void Raycasting::render(sf::RenderWindow& window, Player& player, Map& map)
 {
-	std::vector<Ray> rays = player.getRays();
-
-	float projectionDistance = map.getCellsize() / Glb::tangent(player.getVerticalFov() / 2);
+	float projectionDistance = map.getCellsize() / Glb::tangent(this->verticalFov / 2);
 
 	sf::Vector2f screenSize(window.getSize().x, window.getSize().y);
 
-	float floorLevel = screenSize.y / 2 * (1 + Glb::tangent(player.getVerticalRotation()) / Glb::tangent(player.getVerticalFov() / 2));
+	float floorLevel = screenSize.y / 2 * (1 + Glb::tangent(player.getVerticalRotation()) / Glb::tangent(this->verticalFov / 2));
 
 	// Displaying the sky
 	sf::RectangleShape skyShape(sf::Vector2f(screenSize.x, screenSize.y));
@@ -183,23 +226,23 @@ void Raycasting::render(sf::RenderWindow& window, Player& player, Map& map)
 	// Displaying the walls
 	for (int i = 0; i < screenSize.x; i++)
 	{
-		if (rays[i].length < player.getMaxRayLength())
+		if (this->rays[i].length < this->maxRayLength)
 		{
-			float rayAngle = player.getHorizontalFov() * (floor(screenSize.x) / 2 - i) / (screenSize.x - 1);
-			float rayProjectionPosition = Glb::tangent(rayAngle) / 2 / Glb::tangent(player.getHorizontalFov() / 2);
+			float rayAngle = this->horizontalFov * (floor(screenSize.x) / 2 - i) / (screenSize.x - 1);
+			float rayProjectionPosition = Glb::tangent(rayAngle) / 2 / Glb::tangent(this->horizontalFov / 2);
 
 			int currentColumn = round(screenSize.x * (0.5f - rayProjectionPosition));
 			int nextColumn = screenSize.x;
 
 			if(i < screenSize.x - 1)
 			{
-				float nextRayAngle = player.getHorizontalFov() * (floor(screenSize.x) / 2 - 1 - i) / (screenSize.x - 1);
-				rayProjectionPosition = Glb::tangent(nextRayAngle) / 2 / Glb::tangent(player.getHorizontalFov() / 2);
+				float nextRayAngle = this->horizontalFov * (floor(screenSize.x) / 2 - 1 - i) / (screenSize.x - 1);
+				rayProjectionPosition = Glb::tangent(nextRayAngle) / 2 / Glb::tangent(this->horizontalFov / 2);
 				nextColumn = round(screenSize.x * (0.5f - rayProjectionPosition));
 			}
 
 			float shapeWidth = std::max(1, nextColumn - currentColumn);
-			float shapeHeight = screenSize.y * projectionDistance / (rays[i].length * Glb::cosine(rayAngle));
+			float shapeHeight = screenSize.y * projectionDistance / (this->rays[i].length * Glb::cosine(rayAngle));
 
 			int shapePosX = currentColumn;
 			int shapePosY = floorLevel - shapeHeight / 2;
@@ -209,13 +252,13 @@ void Raycasting::render(sf::RenderWindow& window, Player& player, Map& map)
 
 			int texturePart = 0;
 
-			if(rays[i].hitType == HitType::HORIZONTAL)
+			if(this->rays[i].hitType == HitType::HORIZONTAL)
 			{
-				texturePart = rays[i].hitPoint.y - floor(rays[i].hitPoint.y / map.getCellsize()) * map.getCellsize();
+				texturePart = this->rays[i].hitPoint.y - floor(this->rays[i].hitPoint.y / map.getCellsize()) * map.getCellsize();
 			}
 			else
 			{
-				texturePart = ceil(rays[i].hitPoint.x / map.getCellsize()) * map.getCellsize() - rays[i].hitPoint.x;
+				texturePart = ceil(this->rays[i].hitPoint.x / map.getCellsize()) * map.getCellsize() - this->rays[i].hitPoint.x;
 			}
 
 			float part = Tile::getTextures()[0].getSize().x / map.getCellsize();

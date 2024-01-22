@@ -1,15 +1,10 @@
 #include "header/Player.h"
 
-Player::Player(float windowWidth, sf::Vector2f position, int cellSize) :
+Player::Player(sf::Vector2f position, int cellSize) :
 	radius(cellSize / 2), 
-	maxRayLength(2000),
-	horizontalFov(90.f),
-	verticalFov(90.f),
 	verticalRotation(0) 
 {
 	this->initHitbox(position);
-
-	this->initRays(windowWidth);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -26,25 +21,8 @@ void Player::initHitbox(sf::Vector2f position)
 	this->hitbox.setOrigin(this->radius, this->radius);
 }
 
-void Player::initRays(float windowWidth)
-{
-	for (float i = 0; i <= windowWidth; i++)
-	{
-		Ray newRay;
-		newRay.length = this->maxRayLength;
-		newRay.hitPoint = sf::Vector2f(0, 0);
-
-		this->rays.push_back(newRay);
-	}
-}
-
 /*-------------------------------------------------------------------------------*/
 // Getters
-
-std::vector<Ray> Player::getRays()
-{
-	return this->rays;
-}
 
 sf::Vector2f Player::getPosition()
 {
@@ -55,12 +33,6 @@ sf::Vector2f Player::getPosition()
 float Player::getRadius()
 {
 	return this->radius;
-}
-
-
-float Player::getMaxRayLength()
-{
-	return this->maxRayLength;
 }
 
 
@@ -75,18 +47,6 @@ float Player::getVerticalRotation()
 	return this->verticalRotation;
 }
 
-
-float Player::getHorizontalFov()
-{
-	return this->horizontalFov;
-}
-
-
-float Player::getVerticalFov()
-{
-	return this->verticalFov;
-}
-
 /*-------------------------------------------------------------------------------*/
 // Setters
 
@@ -95,46 +55,17 @@ void Player::setPosition(float x, float y)
 	this->hitbox.setPosition(x, y);
 }
 
-void Player::updateRay(int index, float raySize, sf::Vector2f hitPoint, HitType hitType)
-{
-	this->rays[index].length = raySize;
-	this->rays[index].hitPoint = hitPoint;
-	this->rays[index].hitType = hitType;
-}
-
 /*-------------------------------------------------------------------------------*/
 // Public methods
 
 void Player::update()
 {
-	for (int i = 0; i < this->rays.size(); i++)
-	{
-		this->rays[i].length = this->maxRayLength;
-	}
 }
 
 /*---------------------------------------*/
 
-void Player::render(sf::RenderWindow& window, sf::View& view)
+void Player::render(sf::RenderWindow& window)
 {
-	window.setView(view);
-
-	window.draw(this->hitbox);
-
-	sf::VertexArray fovVisualization(sf::TriangleFan, 1 + this->rays.size());
-	fovVisualization[0].position = this->getPosition();
-
-	for (int i = 0; i < this->rays.size(); i++)
-	{
-		float angle = this->calculateRayAngle(i);
-
-		fovVisualization[1 + i].position = sf::Vector2f(
-			this->getPosition().x + rays[i].length * Glb::cosine(angle),
-			this->getPosition().y + rays[i].length * Glb::sinus(angle));
-	}
-
-	window.draw(fovVisualization);
-	view.setCenter(this->getPosition());
 }
 
 /*---------------------------------------*/
@@ -181,21 +112,6 @@ void Player::horizontallyRotate(float sens)
 void Player::verticallyRotate(float angle)
 {
 	this->verticalRotation = Glb::clamp(this->verticalRotation + angle, -89, 89);
-}
-
-/*-------------------------------------------------------------------------------*/
-
-float Player::calculateRayAngle(int rayIndex)
-{
-	float playerFovStart = this->getHorizontalRotation() - this->horizontalFov / 2;
-	float rayPerDegree = this->horizontalFov / this->rays.size();
-
-	float angle = playerFovStart + rayPerDegree * rayIndex;
-
-	if(angle < 0) angle += 360;
-	else if(angle >= 360) angle -= 360;
-
-	return angle;
 }
 
 /*-------------------------------------------------------------------------------*/

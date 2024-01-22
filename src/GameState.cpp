@@ -4,8 +4,8 @@
 GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName) : 
 	State(gameWindow, game),
 	map("res/map/" + mapName),
-	player(gameWindow->getSize().x, sf::Vector2f(2 * this->map.getCellsize(), 2 * this->map.getCellsize()), this->map.getCellsize()),
-	raycasting(),
+	player(sf::Vector2f(2 * this->map.getCellsize(), 2 * this->map.getCellsize()), this->map.getCellsize()),
+	raycasting(gameWindow->getSize().x),
 	isEscapePressed(false)
 {
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
@@ -92,8 +92,8 @@ void GameState::updateMouseInputs()
 
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
 
-	float horizontalRotation = this->player.getHorizontalFov() * (mousePos.x - windowCenter.x) / this->window->getSize().x;
-	float verticalRotation = this->player.getVerticalFov() * (windowCenter.y - mousePos.y) / this->window->getSize().y;
+	float horizontalRotation = this->raycasting.getHorizontalFov() * (mousePos.x - windowCenter.x) / this->window->getSize().x;
+	float verticalRotation = this->raycasting.getVerticalFov() * (windowCenter.y - mousePos.y) / this->window->getSize().y;
 
 	this->player.horizontallyRotate(horizontalRotation);
 	this->player.verticallyRotate(verticalRotation);
@@ -108,11 +108,6 @@ void GameState::render()
 	this->window->setView(this->gameplayView);
 	
 	this->raycasting.render(*this->window, this->player, this->map);
-
-	this->map.render(*this->window, this->minimapView);
-
-	this->player.render(*this->window, this->minimapView);
-
 }
 
 /*-------------------------------------------------------------------------------*/
