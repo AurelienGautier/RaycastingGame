@@ -5,6 +5,7 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, s
 	State(gameWindow, game),
 	map("res/map/" + mapName),
 	player(gameWindow->getSize().x, sf::Vector2f(2 * this->map.getCellsize(), 2 * this->map.getCellsize()), this->map.getCellsize()),
+	raycasting(),
 	isEscapePressed(false)
 {
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
@@ -21,6 +22,13 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, s
 
 /*-------------------------------------------------------------------------------*/
 
+GameState::~GameState()
+{
+	delete this->instance;
+}
+
+/*-------------------------------------------------------------------------------*/
+
 GameState* GameState::instance = nullptr;
 
 GameState* GameState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName)
@@ -29,6 +37,8 @@ GameState* GameState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, 
 	{
 		instance = new GameState(gameWindow, game, mapName);
 	}
+
+	instance->isEscapePressed = false;
 
 	return instance;
 }
@@ -50,6 +60,7 @@ void GameState::update()
 	this->updateMouseInputs();
 	this->player.update();
 	this->map.update(this->player);
+	this->raycasting.update(this->player);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -95,10 +106,12 @@ void GameState::updateMouseInputs()
 void GameState::render()
 {
 	this->render3d();
+	this->raycasting.render(*this->window);
 
 	this->map.render(*this->window, this->minimapView);
 
 	this->player.render(*this->window, this->minimapView);
+
 }
 
 /*-------------------------------------------------------------------------------*/

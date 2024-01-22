@@ -166,6 +166,48 @@ void Map::convertMap(std::vector<std::vector<int>> intMap)
 
 /*-------------------------------------------------------------------------------*/
 
+bool Map::isWall(Tile cell)
+{
+	if(cell.getType() != CellType::EMPTY) return true;
+	return false;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+int Map::getCellsize()
+{
+	return this->cellSize;
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Map::changeCell(int cellX, int cellY, CellType cellType)
+{
+	if(cellX < 0 || cellX > this->cells[0].size()) return;
+	if(cellY < 0 || cellY >= this->cells.size()) return;
+
+	this->cells[cellY][cellX].setType(cellType);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Map::save()
+{
+	std::ofstream mapFile(this->path);
+
+	for(int i = 0; i < this->cells.size(); i++)
+	{
+		for(int j = 0; j < this->cells[0].size(); j++)
+		{
+			mapFile << (int)this->cells[i][j].getType();
+		}
+
+		mapFile << std::endl;
+	}
+}
+
+/*-------------------------------------------------------------------------------*/
+
 void Map::updateFovContact(Player& player)
 {
 	std::vector<Ray> rays = player.getRays();
@@ -310,48 +352,6 @@ sf::Vector2f Map::getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaFactor)
 	}
 
 	return cellPos;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-bool Map::isWall(Tile cell)
-{
-	if(cell.getType() != CellType::EMPTY) return true;
-	return false;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-int Map::getCellsize()
-{
-	return this->cellSize;
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Map::changeCell(int cellX, int cellY, CellType cellType)
-{
-	if(cellX < 0 || cellX > this->cells[0].size()) return;
-	if(cellY < 0 || cellY >= this->cells.size()) return;
-
-	this->cells[cellY][cellX].setType(cellType);
-}
-
-/*-------------------------------------------------------------------------------*/
-
-void Map::save()
-{
-	std::ofstream mapFile(this->path);
-
-	for(int i = 0; i < this->cells.size(); i++)
-	{
-		for(int j = 0; j < this->cells[0].size(); j++)
-		{
-			mapFile << (int)this->cells[i][j].getType();
-		}
-
-		mapFile << std::endl;
-	}
 }
 
 /*-------------------------------------------------------------------------------*/

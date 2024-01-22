@@ -19,6 +19,11 @@ State::State(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game)
     State::setDefaultView();
 }
 
+State::~State()
+{
+    this->game = nullptr;
+}
+
 /*-------------------------------------------------------------------------------*/
 
 void State::initDefaultView()

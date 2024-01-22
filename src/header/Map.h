@@ -25,7 +25,6 @@ private:
 	sf::Vector2i getDeltaFactor(float angle);
 	sf::Vector2f getDelta(sf::Vector2f cellPos, sf::Vector2i deltaFactor, sf::Vector2f startPoint);
 	sf::Vector2f getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaFactor);
-	bool isWall(Tile cell);
 
 public:
 	Map(std::string mapPath);
@@ -36,6 +35,8 @@ public:
 
 	void updateFovContact(Player& player);
 
+	bool isWall(Tile cell);
+	
 	int getCellsize();
 
 	void changeCell(int cellX, int cellY, CellType cellType);
