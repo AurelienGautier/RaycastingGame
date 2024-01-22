@@ -21,12 +21,6 @@ private:
 
 	bool canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove);
 
-	void defineRay(Player& player, int ray);
-	sf::Vector2i getDeltaFactor(float angle);
-	sf::Vector2f getDelta(sf::Vector2f cellPos, sf::Vector2i deltaFactor, sf::Vector2f startPoint);
-	sf::Vector2f getCellPos(sf::Vector2f startPoint, sf::Vector2i deltaFactor);
-	bool isWall(Tile cell);
-
 public:
 	Map(std::string mapPath);
 
@@ -34,8 +28,8 @@ public:
 	void movePlayer(Player& player, Direction direction);
 	void render(sf::RenderWindow& window, sf::View& view);
 
-	void updateFovContact(Player& player);
-
+	bool isWall(int x, int y);
+	
 	int getCellsize();
 
 	void changeCell(int cellX, int cellY, CellType cellType);
