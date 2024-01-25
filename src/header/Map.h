@@ -23,6 +23,7 @@ private:
 
 public:
 	Map(std::string mapPath);
+	void loadMap(std::string mapPath);
 
 	void update(Player& player);
 	void movePlayer(Player& player, Direction direction);

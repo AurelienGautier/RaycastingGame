@@ -27,6 +27,7 @@ private:
 public:
 	static GameState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName);
 	static GameState* getInstance();
+	void loadMap(std::string mapName);
 	
 	~GameState();
 

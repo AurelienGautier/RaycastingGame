@@ -10,6 +10,16 @@ Map::Map(std::string mapPath) :
 
 /*-------------------------------------------------------------------------------*/
 
+void Map::loadMap(std::string mapPath)
+{
+	this->path = mapPath;
+	this->cells.clear();
+
+	this->getMapFromFile();
+}
+
+/*-------------------------------------------------------------------------------*/
+
 void Map::update(Player& player)
 {
 }

@@ -43,6 +43,12 @@ GameState* GameState::getInstance()
 
 /*-------------------------------------------------------------------------------*/
 
+void GameState::loadMap(std::string mapName)
+{
+	this->map.loadMap("res/map/" + mapName);
+	this->player.setPosition(2 * this->map.getCellsize(), 2 * this->map.getCellsize());
+}
+
 void GameState::update() 
 {
 	this->window->setMouseCursorVisible(false);

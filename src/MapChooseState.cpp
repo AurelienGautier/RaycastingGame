@@ -66,6 +66,9 @@ void MapChooseState::update()
             
             if(this->mapChooseReason == MapChooseReason::PLAY)
             {
+                GameState* gameState = GameState::getInstance(this->window, this->game, this->mapButtonList[i].getText());
+                gameState->loadMap(this->mapButtonList[i].getText());
+
                 this->game->setState(GameState::getInstance(this->window, this->game, this->mapButtonList[i].getText()));
             }
             else if(this->mapChooseReason == MapChooseReason::EDIT)
