@@ -16,10 +16,8 @@ void Map::update(Player& player)
 
 /*-------------------------------------------------------------------------------*/
 
-void Map::render(sf::RenderWindow& window, sf::View& view)
+void Map::render(sf::RenderWindow& window)
 {
-	window.setView(view);
-
 	for (int i = 0; i < this->cells.size(); i++)
 	{
 		for (int j = 0; j < this->cells[0].size(); j++)

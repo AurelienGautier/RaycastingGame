@@ -85,6 +85,7 @@ void MapEditorState::updateButtons()
 
     if(this->exitButton->isClicked(mousePosition))
     {
+        this->window->setView(this->window->getDefaultView());
         this->game->setState(MainMenuState::getInstance(this->window, this->game));
     }
 
@@ -145,7 +146,7 @@ void MapEditorState::render()
 
     this->window->setView(this->mapView);
 
-    this->map.render(*this->window, this->mapView);
+    this->map.render(*this->window);
 
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 

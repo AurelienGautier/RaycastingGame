@@ -26,7 +26,7 @@ public:
 
 	void update(Player& player);
 	void movePlayer(Player& player, Direction direction);
-	void render(sf::RenderWindow& window, sf::View& view);
+	void render(sf::RenderWindow& window);
 
 	bool isWall(int x, int y);
 	

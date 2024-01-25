@@ -9,15 +9,6 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, s
 	isEscapePressed(false)
 {
 	sf::Vector2f windowCenter(this->window->getSize().x / 2, this->window->getSize().y / 2);
-
-	this->gameplayView.setCenter(sf::Vector2f(windowCenter.x, windowCenter.y));
-	this->gameplayView.setSize(sf::Vector2f(this->window->getSize().x, this->window->getSize().y));
-	this->gameplayView.setViewport(sf::FloatRect(0, 0, 1, 1));
-
-	this->minimapView.setCenter(sf::Vector2f(this->window->getSize().x / 8, this->window->getSize().y / 8));
-	this->minimapView.setSize(sf::Vector2f(this->window->getSize().x / 4, this->window->getSize().y / 4));
-	this->minimapView.setViewport(sf::FloatRect(0, 0, 0.25, 0.25));
-	this->minimapView.zoom(4);
 }
 
 /*-------------------------------------------------------------------------------*/
@@ -105,8 +96,6 @@ void GameState::updateMouseInputs()
 
 void GameState::render()
 {
-	this->window->setView(this->gameplayView);
-	
 	this->raycasting.render(*this->window, this->player, this->map);
 }
 

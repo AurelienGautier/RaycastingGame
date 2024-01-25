@@ -62,6 +62,8 @@ void MapChooseState::update()
 
         if(this->mapButtonList[i].isClicked(mousePosition))
         {
+            sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
+            
             if(this->mapChooseReason == MapChooseReason::PLAY)
             {
                 this->game->setState(GameState::getInstance(this->window, this->game, this->mapButtonList[i].getText()));

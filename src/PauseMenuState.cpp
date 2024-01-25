@@ -47,6 +47,7 @@ void PauseMenuState::updateButtons()
 
 	if(this->resumeButton.isClicked(mousePosition))
 	{
+		sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
 		this->game->setState(GameState::getInstance());
 		this->isEscapePressed = true;
 	}
