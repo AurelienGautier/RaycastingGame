@@ -8,11 +8,6 @@ class Game;
 class State
 {
 private:
-	// For the default view
-	static sf::View defaultView;
-	static bool defaultViewSet;
-	void initDefaultView();
-	void setDefaultView();
 
 protected:
 	std::shared_ptr<sf::RenderWindow> window;

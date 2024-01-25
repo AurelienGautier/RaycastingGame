@@ -17,6 +17,7 @@ Game::~Game()
 
 void Game::setState(State* state)
 {
+    sf::Mouse::setPosition(sf::Vector2i(this->window->getSize().x / 2, this->window->getSize().y / 2), *this->window);
     this->currentState = state;
 }
 
