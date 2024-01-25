@@ -20,6 +20,7 @@ private:
 public:
 	// Constructors
 	Player(sf::Vector2f position, int cellSize);
+	void init(float x, float y);
 
 	// Getters
 	sf::Vector2f getPosition();

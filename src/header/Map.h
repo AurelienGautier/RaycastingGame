@@ -22,7 +22,8 @@ private:
 	bool canPlayerMove(sf::Vector2f playerPos, sf::Vector2f playerMove);
 
 public:
-	Map(std::string mapPath);
+	Map();
+	void loadMap(std::string mapPath);
 
 	void update(Player& player);
 	void movePlayer(Player& player, Direction direction);
