@@ -1,10 +1,18 @@
 #include "header/Player.h"
 
 Player::Player(sf::Vector2f position, int cellSize) :
-	radius(cellSize / 2), 
-	verticalRotation(0) 
+	radius(cellSize / 2)
 {
 	this->initHitbox(position);
+}
+
+/*-------------------------------------------------------------------------------*/
+
+void Player::init(float x, float y)
+{
+	this->hitbox.setPosition(x, y);
+	this->verticalRotation = 0;
+	this->hitbox.setRotation(0);
 }
 
 /*-------------------------------------------------------------------------------*/
