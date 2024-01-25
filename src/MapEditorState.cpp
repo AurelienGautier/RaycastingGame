@@ -145,7 +145,7 @@ void MapEditorState::render()
 
     this->window->setView(this->mapView);
 
-    this->map.render(*this->window, this->mapView);
+    this->map.render(*this->window);
 
     sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
 
