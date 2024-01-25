@@ -2,8 +2,9 @@
 
 MapEditorState::MapEditorState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName) :
     State(gameWindow, game),
-    map("res/map/" + mapName)
+    map()
 {
+    this->map.loadMap("res/map/" + mapName);
     this->initInterface();
 
     this->mapView.setCenter(

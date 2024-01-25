@@ -1,9 +1,9 @@
 #include "header/GameState.h"
 #include <iostream>
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName) : 
+GameState::GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game) : 
 	State(gameWindow, game),
-	map("res/map/" + mapName),
+	map(),
 	player(sf::Vector2f(2 * this->map.getCellsize(), 2 * this->map.getCellsize()), this->map.getCellsize()),
 	raycasting(gameWindow->getSize().x),
 	isEscapePressed(false)
@@ -22,11 +22,11 @@ GameState::~GameState()
 
 GameState* GameState::instance = nullptr;
 
-GameState* GameState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName)
+GameState* GameState::getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game)
 {
 	if(instance == nullptr)
 	{
-		instance = new GameState(gameWindow, game, mapName);
+		instance = new GameState(gameWindow, game);
 	}
 
 	instance->isEscapePressed = false;
@@ -48,6 +48,8 @@ void GameState::loadMap(std::string mapName)
 	this->map.loadMap("res/map/" + mapName);
 	this->player.setPosition(2 * this->map.getCellsize(), 2 * this->map.getCellsize());
 }
+
+/*-------------------------------------------------------------------------------*/
 
 void GameState::update() 
 {

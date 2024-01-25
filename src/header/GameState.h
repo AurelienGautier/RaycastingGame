@@ -21,11 +21,11 @@ private:
 
 	void render3dFloor();
 
-	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName);
+	GameState(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
 	static GameState* instance;
 
 public:
-	static GameState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game, std::string mapName);
+	static GameState* getInstance(std::shared_ptr<sf::RenderWindow> gameWindow, Game* game);
 	static GameState* getInstance();
 	void loadMap(std::string mapName);
 	

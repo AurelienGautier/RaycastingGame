@@ -1,11 +1,8 @@
 #include "header/Map.h"
 #include <iostream>
 
-Map::Map(std::string mapPath) : 
-	path(mapPath),
-	cellSize(32)
+Map::Map() : cellSize(32)
 {
-	this->getMapFromFile();
 }
 
 /*-------------------------------------------------------------------------------*/
