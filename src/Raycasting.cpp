@@ -57,10 +57,6 @@ void Raycasting::update(Player& player, Map& map)
     for (int i = 0; i < this->rays.size(); i++)
 	{
 		this->rays[i].length = this->maxRayLength;
-	}
-
-    for (int i = 0; i < this->rays.size(); i++)
-	{
 		this->defineRay(player, i, map);
 	}
 }

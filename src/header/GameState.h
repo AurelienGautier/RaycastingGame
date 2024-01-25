@@ -14,8 +14,6 @@ private:
 	Map map;
 	Player player;
 	Raycasting raycasting;
-	sf::View gameplayView;
-	sf::View minimapView;
 	bool isEscapePressed;
 
 	void updateKeyboardInputs();
