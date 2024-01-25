@@ -85,6 +85,7 @@ void MapEditorState::updateButtons()
 
     if(this->exitButton->isClicked(mousePosition))
     {
+        this->window->setView(this->window->getDefaultView());
         this->game->setState(MainMenuState::getInstance(this->window, this->game));
     }
 
